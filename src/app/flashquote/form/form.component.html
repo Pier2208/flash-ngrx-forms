@@ -1,0 +1,10 @@
+<div *ngIf="formState$ | async as formState">
+  <form [ngrxFormState]="formState">
+    <div>
+      <label>First Name</label>
+      <div>
+        <input type="text" />
+      </div>
+    </div>
+  </form>
+</div>
