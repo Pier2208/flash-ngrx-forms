@@ -1,10 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormControlState } from 'ngrx-forms';
+import { FormControlState, setValue, SetValueAction } from 'ngrx-forms';
 import { Question } from 'src/app/flashquote/models/Question';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { SelectDialogComponent } from '../select-dialog/select-dialog.component';
 import { Store } from '@ngrx/store';
-import { setValue } from 'src/app/flashquote/store/flashquote.actions';
 
 @Component({
   selector: 'app-select',
@@ -13,10 +12,10 @@ import { setValue } from 'src/app/flashquote/store/flashquote.actions';
 })
 export class SelectComponent implements OnInit {
   @Input() question: Question;
-  @Input() control: FormControlState<any>;
+  @Input() control: FormControlState<string>;
   selectedOptions: any[] = [];
 
-  constructor(private matDialog: MatDialog, private store: Store) {}
+  constructor(private matDialog: MatDialog, private store: Store) { }
 
   ngOnInit(): void {
     console.log('control', this.control);
@@ -51,7 +50,8 @@ export class SelectComponent implements OnInit {
     this.selectedOptions?.forEach((opt) => {
       if (opt !== undefined) value.push(opt.id);
     });
-   this.store.dispatch(setValue({ control: this.control, selectedOptions: value.join()}));
+
+    this.store.dispatch(new SetValueAction(this.control.id, value.join()));
   }
 
   remove(option: string): void {

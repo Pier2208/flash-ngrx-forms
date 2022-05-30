@@ -1,6 +1,6 @@
 <div class="container">
     <div class="open-dialog-btn" *ngIf="question.responses.length > 10">
-        <button (click)="openMultiSelectDialog()" mat-mini-fab color="primary">
+        <button type="button" (click)="openMultiSelectDialog()" mat-mini-fab color="primary">
             <mat-icon>add</mat-icon>
         </button>
         <mat-label>{{ question.title.LabelEn}}</mat-label>
@@ -14,4 +14,6 @@
             </button>
         </mat-chip>
     </mat-chip-list>
+
+    <input type="hidden" [ngrxFormControlState]="control" />
 </div>
