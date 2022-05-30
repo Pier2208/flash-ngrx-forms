@@ -10,11 +10,13 @@ import { Question } from 'src/app/flashquote/models/Question';
 export class InputComponent implements OnInit {
   @Input() question: Question;
   @Input() control: FormControlState<any>;
+  @Input() error: any
   inputType: string;
 
   constructor() {}
 
   ngOnInit(): void {
     this.inputType = this.question.type.toLocaleLowerCase();
+    console.log('control', this.control)
   }
 }

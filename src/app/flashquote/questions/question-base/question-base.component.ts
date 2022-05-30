@@ -10,6 +10,7 @@ import { Question } from '../../models/Question';
 export class QuestionBaseComponent implements OnInit {
   @Input() question: Question;
   @Input() control: FormControlState<any>;
+  @Input() error: any;
   constructor() {}
 
   ngOnInit(): void {}

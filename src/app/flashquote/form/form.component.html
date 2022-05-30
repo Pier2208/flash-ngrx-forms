@@ -1,11 +1,18 @@
 <div *ngIf="formState$ | async as formState">
-  <form [ngrxFormState]="formState">
+  <form [ngrxFormState]="formState" (submit)="submit()">
     <ng-container *ngFor="let question of questions">
-      <app-question-base
-        [question]="question"
-        [control]="formState.controls[question.id]"
-      >
+      <app-question-base [question]="question" [control]="formState.controls[question.id]">
       </app-question-base>
     </ng-container>
+    <button type="submit" mat-raised-button color="primary" [disabled]="formState.isPristine
+    && formState.isUntouched
+    && formState.isUnsubmitted">Soumettre</button>
   </form>
+
+  <br />
+  <div *ngIf="submittedValue$ | async">
+    The form was submitted with the following value:
+    <br />
+    <pre>{{ submittedValue$ | async | json }}</pre>
+  </div>
 </div>
