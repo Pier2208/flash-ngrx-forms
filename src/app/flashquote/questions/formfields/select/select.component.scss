@@ -16,3 +16,17 @@ mat-label {
   margin-bottom: 3rem;
   background-color: #f1f1f1;
 }
+
+.button-select {
+  padding: 10px 20px;
+  margin-right: 1.5rem;
+}
+
+.button-select > span {
+  word-wrap: break-word;
+}
+
+.selected {
+  font-weight: 500;
+  background-color: #add8e6;
+}

@@ -21,6 +21,10 @@ export class SelectComponent implements OnInit {
     console.log('control', this.control);
   }
 
+  public get options(): any[] {
+    return this.question.responses || [];
+  }
+
   // open full screen dialog for select with more than 10 options
   openMultiSelectDialog() {
     // create a dialog config object
@@ -61,5 +65,29 @@ export class SelectComponent implements OnInit {
       this.selectedOptions.splice(index, 1);
     }
     this.setControlValue();
+  }
+
+  select(option: string) {
+    const optionIndex = this.options.findIndex((opt) => opt.id === option);
+    // if question does not allow multiple options, reset selectedOptions before select
+    if (this.question.type !== 'MULTIPLE') this.selectedOptions = [];
+
+    const index = this.selectedOptions.indexOf(this.options[optionIndex]);
+    if (index === -1) {
+      this.selectedOptions.push(this.options[optionIndex]);
+    } else {
+      this.selectedOptions.splice(index, 1);
+    }
+
+    this.store.dispatch(new SetValueAction(this.control.id, option));
+  }
+
+
+  // apply some styles if the option is selected
+  isSelected(option: string) {
+    if (this.selectedOptions.length) {
+      console.log('is it?', option, this.selectedOptions.find((opt) => opt.id === option))
+      return this.selectedOptions.find((opt) => opt.id === option);
+    } else return false;
   }
 }
