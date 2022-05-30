@@ -1,0 +1,13 @@
+<div [ngSwitch]="question.type">
+  <div *ngSwitchCase="'TEXT'">
+    <app-input [question]="question" [control]="control"></app-input>
+  </div>
+
+  <div *ngSwitchCase="'NUMBER'">
+    <app-input [question]="question" [control]="control"></app-input>
+  </div>
+
+  <div *ngSwitchCase="'MULTIPLE'">
+    <app-select [question]="question" [control]="control"></app-select>
+  </div>
+</div>

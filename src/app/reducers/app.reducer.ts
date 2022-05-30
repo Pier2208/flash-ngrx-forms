@@ -1,4 +1,4 @@
-import { routerReducer } from '@ngrx/router-store';
+import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import {
   ActionReducer,
   ActionReducerMap,
@@ -9,10 +9,10 @@ import {
 import { environment } from '../../environments/environment';
 
 export interface AppState {
-  flashquote: any
+  router: RouterReducerState<any>;
 }
 
-export const reducers: ActionReducerMap<any> = {
+export const reducers: ActionReducerMap<AppState> = {
   router: routerReducer,
 };
 

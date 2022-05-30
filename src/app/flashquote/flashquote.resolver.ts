@@ -7,8 +7,8 @@ import {
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { tap, first, finalize } from 'rxjs/operators';
-import { AppState } from '../reducers';
-import { loadFlashquote } from './flashquote.actions';
+import { AppState } from '../reducers/app.reducer';
+import { loadFlashquote } from './store/flashquote.actions';
 
 @Injectable()
 export class FlashquoteResolver implements Resolve<any> {

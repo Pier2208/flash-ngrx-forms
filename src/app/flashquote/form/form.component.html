@@ -1,10 +1,11 @@
 <div *ngIf="formState$ | async as formState">
   <form [ngrxFormState]="formState">
-    <div>
-      <label>First Name</label>
-      <div>
-        <input type="text" />
-      </div>
-    </div>
+    <ng-container *ngFor="let question of questions">
+      <app-question-base
+        [question]="question"
+        [control]="formState.controls[question.id]"
+      >
+      </app-question-base>
+    </ng-container>
   </form>
 </div>

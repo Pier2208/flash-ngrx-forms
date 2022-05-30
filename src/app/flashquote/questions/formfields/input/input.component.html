@@ -1,0 +1,11 @@
+<mat-form-field class="input-field" appearance="fill">
+  <mat-label>{{ question.title.LabelEn }}</mat-label>
+  <input
+    type="{{ inputType }}"
+    matInput
+    [ngrxFormControlState]="control"
+  />
+</mat-form-field>
+<!-- <mat-error *ngIf="formState.errors._60?.required">
+    A user name is required
+  </mat-error> -->

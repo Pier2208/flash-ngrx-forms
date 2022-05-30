@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>{{ question.title.LabelEn }}</h1>
+
+<mat-dialog-actions>
+    <!-- set the property searchText to the value of the template ref variable #input -->
+    <mat-form-field>
+        <mat-icon matPrefix>search</mat-icon>
+        <input #input (input)="searchText = input.value" [value]="searchText" matInput type="search"
+            placeholder="Recherche" class="search-input">
+    </mat-form-field>
+</mat-dialog-actions>
+
+<mat-dialog-content class="grid">
+    <!-- get all the options and filtered them out -->
+    <button *ngFor="let opt of data.options | searchFilter: searchText;"
+        class="button-select btn mt-2 mr-2 text-button-option" (click)="select(opt.id)"
+        [ngClass]="{'selected': isSelected(opt.id)}">
+        <span>{{ opt.label.LabelEn }} </span>
+    </button>
+</mat-dialog-content>
+
+<mat-dialog-actions *ngIf="question.type === 'MULTIPLE'">
+    <button mat-raised-button color="primary" (click)="close()"> Soumettre</button>
+</mat-dialog-actions>
