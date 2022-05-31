@@ -9,12 +9,17 @@
 }
 
 mat-label {
-  margin-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.add {
+  margin-right: 1rem;
 }
 
 .container {
   margin-bottom: 3rem;
-  background-color: #f1f1f1;
+  border: 1px solid #949292;
+  border-radius: 8px;
 }
 
 .button-select {
@@ -26,7 +31,10 @@ mat-label {
   word-wrap: break-word;
 }
 
-.selected {
-  font-weight: 500;
-  background-color: #add8e6;
+.select-single {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 1rem 0.5rem;
 }
+

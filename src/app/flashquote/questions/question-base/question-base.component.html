@@ -1,4 +1,4 @@
-<div [ngSwitch]="question.type">
+<div class="wrap" [ngSwitch]="question.type">
   <div *ngSwitchCase="'TEXT'">
     <app-input [question]="question" [control]="control" [error]="error"></app-input>
   </div>

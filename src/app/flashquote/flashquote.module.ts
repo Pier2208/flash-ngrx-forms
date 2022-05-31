@@ -13,15 +13,16 @@ import { QuestionBaseComponent } from './questions/question-base/question-base.c
 
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { InputComponent } from './questions/formfields/input/input.component';
+import { InputComponent } from './questions/components/input/input.component';
 
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import {MatChipsModule} from '@angular/material/chips';
-import { SelectComponent } from './questions/formfields/select/select.component';
-import { SelectDialogComponent } from './questions/formfields/select-dialog/select-dialog.component';
+import { SelectComponent } from './questions/components/select/select.component';
+import { SelectDialogComponent } from './questions/components/select-dialog/select-dialog.component';
 import { SearchFilterPipe } from './pipes/search-filter.pipe';
 import { MatButtonModule } from '@angular/material/button';
+import { ChipComponent } from './questions/components/chip/chip.component';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { MatButtonModule } from '@angular/material/button';
     InputComponent,
     SelectComponent,
     SelectDialogComponent,
-    SearchFilterPipe
+    SearchFilterPipe,
+    ChipComponent
   ],
   imports: [
     CommonModule,
