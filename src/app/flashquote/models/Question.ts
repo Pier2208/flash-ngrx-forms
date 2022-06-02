@@ -1,4 +1,5 @@
 import { Label } from './Label';
+import { Rule } from './Rule';
 
 export class Question {
   id: number;
@@ -14,4 +15,5 @@ export class Question {
   mask: string;
   selectedOptions?: any[];
   questionLinkId?: number;
+  rules: Rule[];
 }

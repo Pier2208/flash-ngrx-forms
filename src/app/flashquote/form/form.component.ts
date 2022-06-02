@@ -21,10 +21,7 @@ export class FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.formState$ = this.store.pipe(
-      select((s) => {
-
-        return s.form.formState;
-      })
+      select((s) => s.form.formState)
     );
 
     this.store.subscribe((state) => {
@@ -41,7 +38,10 @@ export class FormComponent implements OnInit {
       .pipe(
         take(1),
         filter((state) => state.isValid),
-        map((form) => new SetSubmittedValueAction(form.value))
+        map((form) => {
+          console.log('form value', form.value)
+          return new SetSubmittedValueAction(form.value)
+        })
       )
       .subscribe(this.store);
 

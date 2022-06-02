@@ -1,11 +1,15 @@
 import { Action, combineReducers } from '@ngrx/store';
 
 import {
+  addGroupControl,
   createFormGroupState,
   createFormStateReducerWithUpdate,
   FormGroupState,
+  NGRX_UPDATE_ON_TYPE,
   updateGroup,
+  updateRecursive,
   validate,
+  wrapReducerWithFormStateUpdate,
 } from 'ngrx-forms';
 import { required } from 'ngrx-forms/validation';
 
@@ -37,12 +41,18 @@ export class FlashquoteLoadedAction implements Action {
   constructor(public name: string, public flashquote: FlashFormDTO) {}
 }
 
+export class CreateGroupElementAction implements Action {
+  static readonly TYPE = 'form/CREATE_GROUP_ELEMENT';
+  readonly type = CreateGroupElementAction.TYPE;
+  constructor(public name: string) { }
+}
+
 export const FORM_ID = 'contracteur_v2';
 export const INITIAL_STATE = createFormGroupState<FormValue>(FORM_ID, {});
 
 export function formStateReducer(
   s: FormGroupState<FormValue> | undefined = INITIAL_STATE,
-  a: FlashquoteLoadedAction
+  a: FlashquoteLoadedAction | CreateGroupElementAction
 ) {
   switch (a.type) {
     case FlashquoteLoadedAction.TYPE:
@@ -68,6 +78,27 @@ export function formStateReducer(
 
       return s;
 
+    case CreateGroupElementAction.TYPE:
+      const newFormState = updateGroup<FormValue>({
+        2885: (group: any) => {
+          const newGroup = addGroupControl(group, a.name, '');
+          return newGroup;
+        },
+      })(s);
+      console.log('newformstate', newFormState.controls[2885])
+
+      const withValidation = Object.keys(newFormState.controls).reduce((acc: any, key) => {
+        acc[key] = validate(required)
+        return acc
+      }, {})
+
+  
+      return createFormStateReducerWithUpdate<FormValue>(
+        updateGroup<FormValue>({
+          2885: updateGroup<any>(withValidation),
+        })
+      )(newFormState, a);
+
     default:
       return createFormStateReducerWithUpdate<FormValue>(
         updateGroup<FormValue>({
@@ -75,7 +106,7 @@ export function formStateReducer(
           1532: validate(required),
           1533: validate(required),
           2879: validate(required),
-          2885: validate(required),
+          2885: updateGroup<any>({}),
           2880: validate(required),
           2881: validate(required),
           2882: validate(required),
@@ -112,21 +143,6 @@ const reducers = combineReducers<State['form'], any>({
 export function reducer(state: State['form'], action: Action) {
   return reducers(state, action);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // export class CreateGroupElementAction implements Action {
 //   static readonly TYPE = 'form/CREATE_GROUP_ELEMENT';

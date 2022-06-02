@@ -1,9 +1,10 @@
 import { DataSource } from '@angular/cdk/collections';
 import { Component, Input, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Question } from 'src/app/flashquote/models/Question';
+import { CreateGroupElementAction } from 'src/app/flashquote/store';
 
 @Component({
   selector: 'app-repartition',
@@ -12,9 +13,10 @@ import { Question } from 'src/app/flashquote/models/Question';
 })
 export class RepartitionComponent implements OnInit {
   displayedColumns: string[] = ['name', 'percentage'];
-  responses = [];
+  responses: any[] = [];
+  groupOptions$: Observable<any>;
   @Input() question: Question;
-  @Input() control: any
+  @Input() control: any;
 
   constructor(private store: Store<any>) {}
 
@@ -25,6 +27,12 @@ export class RepartitionComponent implements OnInit {
       )[0].responses;
     });
 
-    console.log('reponses', this.responses)
+    this.groupOptions$ = this.store.pipe(
+      select((s) => s.form.formState.controls[this.question.id].controls)
+    );
+
+    this.responses.forEach((response: any) => {
+      this.store.dispatch(new CreateGroupElementAction(response.responseKey));
+    });
   }
 }

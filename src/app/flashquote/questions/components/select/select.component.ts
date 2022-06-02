@@ -17,9 +17,7 @@ export class SelectComponent implements OnInit {
 
   constructor(private matDialog: MatDialog, private store: Store) { }
 
-  ngOnInit(): void {
-    console.log('control', this.control);
-  }
+  ngOnInit(): void {}
 
   public get options(): any[] {
     return this.question.responses || [];

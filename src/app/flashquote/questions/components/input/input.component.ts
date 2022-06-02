@@ -17,6 +17,5 @@ export class InputComponent implements OnInit {
 
   ngOnInit(): void {
     this.inputType = this.question.type.toLocaleLowerCase();
-    console.log('control', this.control)
   }
 }
