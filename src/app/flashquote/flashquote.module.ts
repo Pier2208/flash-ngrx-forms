@@ -18,11 +18,13 @@ import { InputComponent } from './questions/components/input/input.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import {MatChipsModule} from '@angular/material/chips';
+import {MatTableModule} from '@angular/material/table';
 import { SelectComponent } from './questions/components/select/select.component';
 import { SelectDialogComponent } from './questions/components/select-dialog/select-dialog.component';
 import { SearchFilterPipe } from './pipes/search-filter.pipe';
 import { MatButtonModule } from '@angular/material/button';
 import { ChipComponent } from './questions/components/chip/chip.component';
+import { RepartitionComponent } from './questions/components/repartition/repartition.component';
 
 
 @NgModule({
@@ -34,7 +36,8 @@ import { ChipComponent } from './questions/components/chip/chip.component';
     SelectComponent,
     SelectDialogComponent,
     SearchFilterPipe,
-    ChipComponent
+    ChipComponent,
+    RepartitionComponent
   ],
   imports: [
     CommonModule,
@@ -45,6 +48,7 @@ import { ChipComponent } from './questions/components/chip/chip.component';
     MatDialogModule,
     MatChipsModule,
     MatIconModule,
+    MatTableModule,
     MatButtonModule,
     EffectsModule.forFeature([FlashquoteEffects]),
     StoreModule.forFeature(

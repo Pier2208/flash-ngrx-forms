@@ -1,10 +1,18 @@
 <div class="wrap" [ngSwitch]="question.type">
   <div *ngSwitchCase="'TEXT'">
-    <app-input [question]="question" [control]="control" [error]="error"></app-input>
+    <app-input
+      [question]="question"
+      [control]="control"
+      [error]="error"
+    ></app-input>
   </div>
 
   <div *ngSwitchCase="'NUMBER'">
-    <app-input [question]="question" [control]="control" [error]="error"></app-input>
+    <app-input
+      [question]="question"
+      [control]="control"
+      [error]="error"
+    ></app-input>
   </div>
 
   <div *ngSwitchCase="'MULTIPLE'">
@@ -13,5 +21,9 @@
 
   <div *ngSwitchCase="'SELECT'">
     <app-select [question]="question" [control]="control"></app-select>
+  </div>
+
+  <div *ngSwitchCase="'REPARTITION'">
+    <app-repartition [question]="question" [control]="control"></app-repartition>
   </div>
 </div>

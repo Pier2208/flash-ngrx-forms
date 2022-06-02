@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { FlashquoteActions } from './action-types';
 import { FlashquoteService } from '../services/flashquote.service';
-import { flashquoteLoaded } from './flashquote.actions';
 import { FlashFormDTO } from '../models/Flashquote';
 import { concatMap, map } from 'rxjs/operators';
+import { FlashquoteLoadedAction } from '.';
 
 @Injectable()
 export class FlashquoteEffects {
@@ -13,7 +13,7 @@ export class FlashquoteEffects {
       ofType(FlashquoteActions.loadFlashquote),
       concatMap((action) => this.flashquoteService.getFlashquote()),
       map((flashquote: FlashFormDTO ) => {
-        return flashquoteLoaded({ flashquote})
+        return new FlashquoteLoadedAction('FLASHQUOTE_LOADED', flashquote)
       })
     )
   );

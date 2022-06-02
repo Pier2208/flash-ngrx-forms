@@ -6,7 +6,6 @@ import { ResetAction, SetValueAction } from 'ngrx-forms';
 import { setSubmittedValue } from '../store/flashquote.actions';
 import { filter, map, take } from 'rxjs/operators';
 import { FormValue, SetSubmittedValueAction } from '../store';
-import { INITIAL_STATE } from '../store';
 
 @Component({
   selector: 'app-form',
@@ -18,18 +17,19 @@ export class FormComponent implements OnInit {
   questions: Question[];
   submittedValue$: Observable<FormValue | undefined>;
 
-  constructor(private store: Store<any>) { }
+  constructor(private store: Store<any>) {}
 
   ngOnInit(): void {
-    this.formState$ = this.store.pipe(select((s) => {
-      console.log('s', s.form.formState.errors)
-      return s.form.formState
-    }));
+    this.formState$ = this.store.pipe(
+      select((s) => {
 
-    this.store.subscribe(state => {
-      this.questions = state.form.questions
-      console.log('this.questions', this.questions)
-    })
+        return s.form.formState;
+      })
+    );
+
+    this.store.subscribe((state) => {
+      this.questions = state.form.questions;
+    });
 
     this.submittedValue$ = this.store.pipe(
       select((s) => s.form.submittedValue)
@@ -37,14 +37,16 @@ export class FormComponent implements OnInit {
   }
 
   submit() {
-    this.formState$.pipe(
-      take(1),
-      filter(state => state.isValid),
-      map(form => new SetSubmittedValueAction(form.value)),
-    ).subscribe(this.store);
+    this.formState$
+      .pipe(
+        take(1),
+        filter((state) => state.isValid),
+        map((form) => new SetSubmittedValueAction(form.value))
+      )
+      .subscribe(this.store);
 
     // dispatch action to set the form as pristine, untouched and unsubmitted
-    this.store.dispatch(new ResetAction(INITIAL_STATE.id));
-   // this.store.dispatch(new SetValueAction(INITIAL_STATE.id, INITIAL_STATE.value));
+    //this.store.dispatch(new ResetAction(INITIAL_STATE.id));
+    // this.store.dispatch(new SetValueAction(INITIAL_STATE.id, INITIAL_STATE.value));
   }
 }

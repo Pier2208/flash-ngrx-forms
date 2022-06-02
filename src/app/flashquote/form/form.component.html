@@ -2,12 +2,23 @@
   <!-- DYNAMIC FORM -->
   <form [ngrxFormState]="formState" (submit)="submit()">
     <ng-container *ngFor="let question of questions">
-      <app-question-base [question]="question" [control]="formState.controls[question.id]">
+      <app-question-base
+        [question]="question"
+        [control]="formState.controls[question.id]
+        "
+      >
       </app-question-base>
     </ng-container>
-    <button type="submit" mat-raised-button color="primary" [disabled]="formState.isPristine
-    && formState.isUntouched
-    && formState.isUnsubmitted">Soumettre</button>
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="
+        formState.isPristine && formState.isUntouched && formState.isUnsubmitted
+      "
+    >
+      Soumettre
+    </button>
   </form>
 
   <!-- FOR TESTING THE FORM -->
