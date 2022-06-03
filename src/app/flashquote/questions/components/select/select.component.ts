@@ -17,7 +17,9 @@ export class SelectComponent implements OnInit {
 
   constructor(private matDialog: MatDialog, private store: Store) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log('question', this.question)
+  }
 
   public get options(): any[] {
     return this.question.responses || [];
@@ -52,6 +54,8 @@ export class SelectComponent implements OnInit {
     this.selectedOptions?.forEach((opt) => {
       if (opt !== undefined) value.push(opt.id);
     });
+
+    console.log('selectedOpts', value.join())
 
     this.store.dispatch(new SetValueAction(this.control.id, value.join()));
   }

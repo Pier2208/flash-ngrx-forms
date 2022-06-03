@@ -22,9 +22,20 @@ export class RepartitionComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.subscribe((state) => {
-      this.responses = state.form.questions.filter(
-        (q: Question) => q.id === this.question.id
-      )[0].responses;
+      // this.responses = state.form.questions.filter(
+      //   (q: Question) => q.id === this.question.id
+      // )[0].responses;
+      this.responses = [
+        {
+          id: 12579,
+          responseKey: '91',
+          label: {
+            LabelFr: 'Électricien : secteurs résidentiel et commercial (1731)',
+            LabelEn: 'Electrician: residential and commercial sectors (1731)',
+          },
+          showOrder: 0,
+        },
+      ];
     });
 
     this.groupOptions$ = this.store.pipe(

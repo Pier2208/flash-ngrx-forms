@@ -15,6 +15,7 @@ export class RuleService {
   // triggers:string[] = [];
   // sequence:Map<string,Rule> = new Map<string, Rule>();
   // actions:Action[] = [];
+  actions: any[] = []
 
   // sequenceTriggered: Map<string,Rule[]> = new Map<string, Rule[]>();
   // actionSequenceTriggered: Map<string, string[]> = new Map<string, string[]>();
