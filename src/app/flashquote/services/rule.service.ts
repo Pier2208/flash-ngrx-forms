@@ -2,13 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Question } from '../models/Question';
 import { Rule } from '../models/Rule';
-import { isNullOrUndefined } from 'util';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class RuleService {
-  constructor(private http:HttpClient) { }
+  constructor() { }
 
   rules:Rule[] = [];
   questions:Question[] = [];
