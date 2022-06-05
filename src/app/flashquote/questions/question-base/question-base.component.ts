@@ -1,5 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  OnChanges,
+  SimpleChange,
+} from '@angular/core';
 import { FormControlState } from 'ngrx-forms';
+import { Observable } from 'rxjs';
 import { Question } from '../../models/Question';
 
 @Component({

@@ -1,18 +1,22 @@
-import { DataSource } from '@angular/cdk/collections';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { FormGroupState } from 'ngrx-forms';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Question } from 'src/app/flashquote/models/Question';
-import { CreateGroupElementAction } from 'src/app/flashquote/store';
 
 @Component({
   selector: 'app-repartition',
   templateUrl: './repartition.component.html',
   styleUrls: ['./repartition.component.scss'],
 })
-export class RepartitionComponent implements OnInit {
+export class RepartitionComponent implements OnInit, OnChanges {
   displayedColumns: string[] = ['name', 'percentage'];
+  responseList: any[] = [];
   responses: any[] = [];
   groupOptions$: Observable<any>;
   @Input() question: Question;
@@ -21,29 +25,35 @@ export class RepartitionComponent implements OnInit {
   constructor(private store: Store<any>) {}
 
   ngOnInit(): void {
-    this.store.subscribe((state) => {
-      // this.responses = state.form.questions.filter(
-      //   (q: Question) => q.id === this.question.id
-      // )[0].responses;
-      this.responses = [
-        {
-          id: 12579,
-          responseKey: '91',
-          label: {
-            LabelFr: 'Électricien : secteurs résidentiel et commercial (1731)',
-            LabelEn: 'Electrician: residential and commercial sectors (1731)',
-          },
-          showOrder: 0,
-        },
-      ];
-    });
-
     this.groupOptions$ = this.store.pipe(
-      select((s) => s.form.formState.controls[this.question.id].controls)
+      select((s) => {
+        return s.form.formState.controls[this.question.id].controls;
+      })
     );
 
-    this.responses.forEach((response: any) => {
-      this.store.dispatch(new CreateGroupElementAction(response.responseKey));
+    this.store.subscribe((s) => {
+      this.responses = s.form.questions.find(
+        (q: any) => q.id == this.question.id
+      ).responses;
     });
+    console.log('responses', this.responses);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    const previousValue = changes.control.previousValue?.value;
+    const currentValue = changes.control.currentValue?.value;
+
+    if (currentValue & previousValue) {
+      if (currentValue !== previousValue) {
+        if (Object.keys(currentValue)[0] in previousValue) return;
+        for (let key in currentValue) {
+          for (let response of this.responses) {
+            if (response.responseKey == key)
+              //https://stackoverflow.com/questions/63015954/why-ngonchanges-does-not-trigger-when-input-update-the-data-angular-8
+              this.responseList = [...this.responseList, response];
+          }
+        }
+      }
+    }
   }
 }

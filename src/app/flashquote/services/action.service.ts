@@ -1,42 +1,81 @@
 import { Injectable } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { SetValueAction } from 'ngrx-forms';
+import { Subject } from 'rxjs';
+import { AppState } from 'src/app/reducers/app.reducer';
+import { Question } from '../models/Question';
+import {
+  CreateGroupElementAction,
+  GetResponsesFromPreviousAnswerAction,
+} from '../store';
 import { RuleService } from './rule.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ActionService {
+  questions: Question[] = [];
+  value$ = new Subject<string>();
 
-  constructor(private ruleService: RuleService) { }
+  constructor(private ruleService: RuleService, private store: Store<any>) {
+    this.store.subscribe((state) => {
+      this.questions = state.form.questions;
+    });
+  }
 
   // validate(form:Form, sectionState:Section[], sectionComponents:any, currentSection:number): void {
-    validate() {
+  validate(question?: Question, control?: any) {
+    question?.rules.forEach((rule) => {
+      const destinationId = rule.destinationId;
+      switch (rule.action) {
+        case 'RETRIEVE_RESPONSE':
+          this.getResponsesFromPreviousAnswer(question, control, destinationId)
+      }
+    });
+  }
 
+  getResponsesFromPreviousAnswer(question: Question, control: any, destinationId:number) {
+    const responseList: string[] = [];
+    const responses = this.questions.find((q) => q.id == question.id)!.responses;
+    const selectedOptions = control.value.split(',');
+
+    for (let id of selectedOptions) {
+      for (let response of responses) {
+        if (id == response.id) responseList.push(response.responseKey);
+      }
     }
+
+    responseList.forEach((response) => {
+      this.store.dispatch(new CreateGroupElementAction(response, destinationId));
+    });
+  }
+
+
   //   var allActions = this.ruleService.actions || [];
   //   allActions.forEach(action => {
   //     var destination = action.destinationId.toString();
   //     switch (action.action) {
-        // case 'HIDE':
-        //   this.showHide(sectionComponents, action.key, destination, true);
-        //   break;
-        // case 'SHOW':
-        //   this.showHide(sectionComponents, action.key, destination, false);
-        //   break;
-        // case 'REFERRED':
-        //   this.ruleService.addReferred(action.rule);
-        //   break;
-        // case 'EXCLUDED':
-        //   var section = form.sections.find(x => x.questions.some(y => y.id == action.rule.questionId));
-        //   if(section != null && form.sections.indexOf(section) == currentSection){
-        //     this.ruleService.addExcluded(action.rule);
-        //   }
-        //   break;
-        // case 'FORCE':
-        //   this.forceValue(sectionState, sectionComponents, action.key, action.rule);
-        //   break;
-        // case 'UNFORCE':
-        //   this.forceValue(sectionState, sectionComponents, action.key, action.rule, true);
-        //   break;
+  // case 'HIDE':
+  //   this.showHide(sectionComponents, action.key, destination, true);
+  //   break;
+  // case 'SHOW':
+  //   this.showHide(sectionComponents, action.key, destination, false);
+  //   break;
+  // case 'REFERRED':
+  //   this.ruleService.addReferred(action.rule);
+  //   break;
+  // case 'EXCLUDED':
+  //   var section = form.sections.find(x => x.questions.some(y => y.id == action.rule.questionId));
+  //   if(section != null && form.sections.indexOf(section) == currentSection){
+  //     this.ruleService.addExcluded(action.rule);
+  //   }
+  //   break;
+  // case 'FORCE':
+  //   this.forceValue(sectionState, sectionComponents, action.key, action.rule);
+  //   break;
+  // case 'UNFORCE':
+  //   this.forceValue(sectionState, sectionComponents, action.key, action.rule, true);
+  //   break;
   //       case 'RETRIEVE':
   //         this.getOptionsFromPreviousAnswer(sectionComponents, action.rule);
   //         break;
@@ -45,7 +84,6 @@ export class ActionService {
   //   });
   // }
 
-  
   // showHide(sectionComponents:any, _key:string, id: string, hidden: boolean) {
   //   sectionComponents.forEach(section => {
   //     var control = null;
@@ -130,7 +168,7 @@ export class ActionService {
   //   var destinationQuestions = [];
 
   //   // use forms value and patchvalue of form instead
-    
+
   //   sectionComponents.forEach(section => {
   //     var forms = section.formArray || section;
   //     forms.forEach((page:FormPage) => {

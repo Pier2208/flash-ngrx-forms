@@ -4,6 +4,7 @@ import { Question } from 'src/app/flashquote/models/Question';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { SelectDialogComponent } from '../select-dialog/select-dialog.component';
 import { Store } from '@ngrx/store';
+import { RemoveGroupElementAction } from 'src/app/flashquote/store';
 
 @Component({
   selector: 'app-select',
@@ -52,10 +53,8 @@ export class SelectComponent implements OnInit {
     let value: string[] = [];
 
     this.selectedOptions?.forEach((opt) => {
-      if (opt !== undefined) value.push(opt.id);
+      if (opt) value.push(opt.id);
     });
-
-    console.log('selectedOpts', value.join())
 
     this.store.dispatch(new SetValueAction(this.control.id, value.join()));
   }

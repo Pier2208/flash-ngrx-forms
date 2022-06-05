@@ -6,6 +6,7 @@ import {
   createFormStateReducerWithUpdate,
   FormGroupState,
   NGRX_UPDATE_ON_TYPE,
+  removeGroupControl,
   updateGroup,
   updateRecursive,
   validate,
@@ -44,7 +45,19 @@ export class FlashquoteLoadedAction implements Action {
 export class CreateGroupElementAction implements Action {
   static readonly TYPE = 'form/CREATE_GROUP_ELEMENT';
   readonly type = CreateGroupElementAction.TYPE;
-  constructor(public name: string) { }
+  constructor(public responseKey: any, public destinationId: any) {}
+}
+
+export class RemoveGroupElementAction implements Action {
+  static readonly TYPE = 'form/REMOVE_GROUP_ELEMENT';
+  readonly type = RemoveGroupElementAction.TYPE;
+  constructor(public responseKey: any, public destinationId: any) {}
+}
+
+export class GetResponsesFromPreviousAnswerAction implements Action {
+  static readonly TYPE = 'form/GET_RESPONSES_FROM_PREVIOUS_ANSWER';
+  readonly type = GetResponsesFromPreviousAnswerAction.TYPE;
+  constructor(public responseList: any[], public destinationId: number) {}
 }
 
 export const FORM_ID = 'contracteur_v2';
@@ -52,7 +65,10 @@ export const INITIAL_STATE = createFormGroupState<FormValue>(FORM_ID, {});
 
 export function formStateReducer(
   s: FormGroupState<FormValue> | undefined = INITIAL_STATE,
-  a: FlashquoteLoadedAction | CreateGroupElementAction
+  a:
+    | FlashquoteLoadedAction
+    | CreateGroupElementAction
+    | RemoveGroupElementAction
 ) {
   switch (a.type) {
     case FlashquoteLoadedAction.TYPE:
@@ -78,26 +94,53 @@ export function formStateReducer(
 
       return s;
 
-    case CreateGroupElementAction.TYPE:
+    case RemoveGroupElementAction.TYPE:
       const newFormState = updateGroup<FormValue>({
-        2885: (group: any) => {
-          const newGroup = addGroupControl(group, a.name, '');
+        [a.destinationId]: (group: any) => {
+          const newGroup = removeGroupControl(group, a.responseKey);
           return newGroup;
         },
       })(s);
-      console.log('newformstate', newFormState.controls[2885])
 
-      const withValidation = Object.keys(newFormState.controls).reduce((acc: any, key) => {
-        acc[key] = validate(required)
-        return acc
-      }, {})
+      const withValidatio = Object.keys(newFormState.controls).reduce(
+        (acc: any, key) => {
+          acc[key] = validate(required);
+          return acc;
+        },
+        {}
+      );
 
-  
       return createFormStateReducerWithUpdate<FormValue>(
         updateGroup<FormValue>({
-          2885: updateGroup<any>(withValidation),
+          [a.destinationId]: updateGroup<any>(withValidatio),
         })
       )(newFormState, a);
+
+    case CreateGroupElementAction.TYPE:
+      const value = s.controls[a.destinationId].value as {};
+      if (!(a.responseKey in value)) {
+        const newS = updateGroup<FormValue>({
+          [a.destinationId]: (group: any) => {
+            return addGroupControl(group, a.responseKey, '');
+          },
+        })(s);
+
+        const withValidation = Object.keys(newS.controls).reduce(
+          (acc: any, key) => {
+            acc[key] = validate(required);
+            return acc;
+          },
+          {}
+        );
+
+        return createFormStateReducerWithUpdate<FormValue>(
+          updateGroup<FormValue>({
+            [a.destinationId]: updateGroup<any>(withValidation),
+          })
+        )(newS, a);
+      }
+
+      return s
 
     default:
       return createFormStateReducerWithUpdate<FormValue>(
@@ -140,8 +183,8 @@ const reducers = combineReducers<State['form'], any>({
   },
 });
 
-export function reducer(state: State['form'], action: Action) {
-  return reducers(state, action);
+export function reducer(s: State['form'], a: Action) {
+  return reducers(s, a);
 }
 
 // export class CreateGroupElementAction implements Action {
