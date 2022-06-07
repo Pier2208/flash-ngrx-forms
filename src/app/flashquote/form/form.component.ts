@@ -7,6 +7,7 @@ import { setSubmittedValue } from '../store/flashquote.actions';
 import { filter, map, take } from 'rxjs/operators';
 import { FormValue, SetSubmittedValueAction, State } from '../store';
 import { ActionService } from '../services/action.service';
+import { Answer } from '../models/Answer';
 
 @Component({
   selector: 'app-form',
