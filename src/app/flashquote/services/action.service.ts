@@ -45,14 +45,13 @@ export class ActionService {
   ) {
     const responseKeyList: string[] = [];
     const responses: Response[] = this.questions.find((q) => q.id === question.id)!.responses;
-    const selectedOptionIds: string[] = control.value.split(',');
+    const selectedResponseKeys: string[] = control.value.split(',');
     const prevValues = Object.keys(this.formState.controls[destinationId].value);
 
-    for (let id of selectedOptionIds) {
+    for (let key of selectedResponseKeys) {
       for (let response of responses) {
-        if (parseInt(id) === response.id) responseKeyList.push(response.responseKey);
+        if (key === response.responseKey) responseKeyList.push(response.responseKey);
       }
-      console.log("responseKeyList", responseKeyList)
     }
 
     // remove input

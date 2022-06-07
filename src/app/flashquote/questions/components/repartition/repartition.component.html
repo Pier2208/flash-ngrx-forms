@@ -1,4 +1,4 @@
-<table *ngIf="responseList.length" mat-table [dataSource]="responseList" class="demo-table">
+<table *ngIf="responseList.length" mat-table [dataSource]="responseList" class="table">
   <!-- Name Column -->
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef>
@@ -12,14 +12,8 @@
   <ng-container matColumnDef="percentage">
     <th mat-header-cell *matHeaderCellDef>%</th>
     <td mat-cell *matCellDef="let element">
-      <input
-       [ngrxFormControlState]="(groupOptions$ | async)[element.responseKey]"
-        placeholder="0"
-        class="table-input"
-        matInput
-        type="number"
-        value="{{ element.percentage }}"
-      />
+      <input class="table-input" [ngrxFormControlState]="(groupOptions$ | async)[element.responseKey]" placeholder="0"
+        matInput type="number" value="{{ element.percentage }}" />
     </td>
     <td mat-footer-cell *matFooterCellDef> {{getTotalPercentage()}} </td>
   </ng-container>

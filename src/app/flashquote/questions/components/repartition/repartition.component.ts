@@ -19,7 +19,7 @@ export class RepartitionComponent implements OnInit {
   @Input() question: Question;
   @Input() control: FormControlState<any>;
 
-  constructor(private store: Store<State>) {}
+  constructor(private store: Store<State>) { }
 
   ngOnInit() {
     // load all the responses for the current repartition
@@ -36,9 +36,7 @@ export class RepartitionComponent implements OnInit {
 
     // update the UI in real-time - we sync the formState with the UI (remove/add an input is handled here)
     this.groupOptions$.subscribe((data: FormControlState<any>) => {
-      this.responseList = Object.keys(data).map((key) =>
-        this.responses.find((res) => res.responseKey === key)
-      );
+      this.responseList = Object.keys(data).map((key) => this.responses.find((res) => res.responseKey === key));
     });
   }
 

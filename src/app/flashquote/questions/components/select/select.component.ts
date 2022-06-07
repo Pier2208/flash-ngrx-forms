@@ -40,7 +40,6 @@ export class SelectComponent {
     // when closing, the dialog passes the selected options back to the caller component
     dialogRef.afterClosed().subscribe((data) => {
       this.selectedOptions = data || this.selectedOptions || [];
-      console.log('selected opts', this.selectedOptions)
       this.setControlValue();
     });
   }
@@ -49,7 +48,7 @@ export class SelectComponent {
   setControlValue() {
     let value: string[] = [];
 
-    this.selectedOptions?.forEach((opt) => {
+    this.selectedOptions?.forEach((opt: Response) => {
       if (opt) value.push(opt.responseKey);
     });
 
@@ -76,7 +75,6 @@ export class SelectComponent {
     } else {
       this.selectedOptions.splice(index, 1);
     }
-
     this.store.dispatch(new SetValueAction(this.control.id, option));
   }
 

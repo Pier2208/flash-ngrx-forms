@@ -30,7 +30,7 @@ export interface State extends RootState {
 export class SetSubmittedValueAction implements Action {
   static readonly TYPE = 'form/SET_SUBMITTED_VALUE';
   readonly type = SetSubmittedValueAction.TYPE;
-  constructor(public submittedValue: FormValue) {}
+  constructor(public submittedValue: any) {}
 }
 
 export class FlashquoteLoadedAction implements Action {

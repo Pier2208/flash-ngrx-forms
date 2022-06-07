@@ -18,11 +18,12 @@ export class FormComponent implements OnInit {
   formState$: Observable<any>;
   questions: Question[];
   submittedValue$: Observable<FormValue | undefined>;
+  answers: Answer[];
 
   constructor(
     private store: Store<State>,
     private actionService: ActionService
-  ) {}
+  ) { }
 
   ngOnInit() {
     // get an Observable for the whole form
@@ -57,7 +58,13 @@ export class FormComponent implements OnInit {
         take(1),
         filter((state) => state.isValid),
         map((form) => {
-          return new SetSubmittedValueAction(form.value);
+          let answers = []
+          for (let key in form.value) {
+            const identifier = this.questions.map((q: Question) => q.id === parseInt(key) ? q.identifier : '')[0]
+            answers.push(new Answer(key, '', identifier, form.value[key]))
+          }
+          console.log('aaa', answers)
+          return new SetSubmittedValueAction(answers);
         })
       )
       .subscribe(this.store);
