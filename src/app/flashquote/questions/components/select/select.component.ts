@@ -1,26 +1,22 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { FormControlState, setValue, SetValueAction } from 'ngrx-forms';
+import { Component, Input } from '@angular/core';
+import { FormControlState, SetValueAction } from 'ngrx-forms';
 import { Question } from 'src/app/flashquote/models/Question';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { SelectDialogComponent } from '../select-dialog/select-dialog.component';
 import { Store } from '@ngrx/store';
-import { RemoveGroupElementAction } from 'src/app/flashquote/store';
+import { Response } from 'src/app/flashquote/models/Response';
 
 @Component({
   selector: 'app-select',
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss'],
 })
-export class SelectComponent implements OnInit {
+export class SelectComponent {
   @Input() question: Question;
   @Input() control: FormControlState<string>;
   selectedOptions: any[] = [];
 
   constructor(private matDialog: MatDialog, private store: Store) { }
-
-  ngOnInit(): void {
-    console.log('question', this.question)
-  }
 
   public get options(): any[] {
     return this.question.responses || [];
@@ -87,7 +83,6 @@ export class SelectComponent implements OnInit {
   // apply some styles if the option is selected
   isSelected(option: string) {
     if (this.selectedOptions.length) {
-      console.log('is it?', option, this.selectedOptions.find((opt) => opt.id === option))
       return this.selectedOptions.find((opt) => opt.id === option);
     } else return false;
   }

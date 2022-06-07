@@ -1,59 +1,51 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  OnChanges,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
+import { FormControlState } from 'ngrx-forms';
 import { Observable } from 'rxjs';
 import { Question } from 'src/app/flashquote/models/Question';
+import { Response } from 'src/app/flashquote/models/Response';
+import { State } from 'src/app/flashquote/store';
 
 @Component({
   selector: 'app-repartition',
   templateUrl: './repartition.component.html',
   styleUrls: ['./repartition.component.scss'],
 })
-export class RepartitionComponent implements OnInit, OnChanges {
+export class RepartitionComponent implements OnInit {
   displayedColumns: string[] = ['name', 'percentage'];
-  responseList: any[] = [];
-  responses: any[] = [];
-  groupOptions$: Observable<any>;
+  responseList: (Response | undefined)[] = []; // only the responses selected by the user
+  responses: Response[] = []; // all the possible responses for this repartition
+  groupOptions$: Observable<any>; // an Observable that tracks down all active inputs inside the repartition (also used to sync the UI)
   @Input() question: Question;
-  @Input() control: any;
+  @Input() control: FormControlState<any>;
 
-  constructor(private store: Store<any>) {}
+  constructor(private store: Store<State>) {}
 
-  ngOnInit(): void {
-    this.groupOptions$ = this.store.pipe(
-      select((s) => {
-        return s.form.formState.controls[this.question.id].controls;
-      })
-    );
-
+  ngOnInit() {
+    // load all the responses for the current repartition
     this.store.subscribe((s) => {
       this.responses = s.form.questions.find(
-        (q: any) => q.id == this.question.id
+        (q: Question) => q.id === this.question.id
       ).responses;
     });
-    console.log('responses', this.responses);
+
+    // get all the current active inputs inside the repartition thanks to an Observable selector
+    this.groupOptions$ = this.store.pipe(
+      select((s) => s.form.formState.controls[this.question.id].controls)
+    );
+
+    // update the UI in real-time - we sync the formState with the UI (remove/add an input is handled here)
+    this.groupOptions$.subscribe((data: FormControlState<any>) => {
+      this.responseList = Object.keys(data).map((key) =>
+        this.responses.find((res) => res.responseKey === key)
+      );
+    });
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    const previousValue = changes.control.previousValue?.value;
-    const currentValue = changes.control.currentValue?.value;
-
-    if (currentValue & previousValue) {
-      if (currentValue !== previousValue) {
-        if (Object.keys(currentValue)[0] in previousValue) return;
-        for (let key in currentValue) {
-          for (let response of this.responses) {
-            if (response.responseKey == key)
-              //https://stackoverflow.com/questions/63015954/why-ngonchanges-does-not-trigger-when-input-update-the-data-angular-8
-              this.responseList = [...this.responseList, response];
-          }
-        }
-      }
-    }
+  /** Gets the total percentage of the repartition */
+  getTotalPercentage() {
+    let total = 0;
+    for (let i in this.control.value) total += this.control.value[i];
+    return total;
   }
 }

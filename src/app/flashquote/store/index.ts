@@ -5,12 +5,9 @@ import {
   createFormGroupState,
   createFormStateReducerWithUpdate,
   FormGroupState,
-  NGRX_UPDATE_ON_TYPE,
   removeGroupControl,
   updateGroup,
-  updateRecursive,
   validate,
-  wrapReducerWithFormStateUpdate,
 } from 'ngrx-forms';
 import { required } from 'ngrx-forms/validation';
 
@@ -102,7 +99,7 @@ export function formStateReducer(
         },
       })(s);
 
-      const withValidatio = Object.keys(newFormState.controls).reduce(
+      const withValidation = Object.keys(newFormState.controls).reduce(
         (acc: any, key) => {
           acc[key] = validate(required);
           return acc;
@@ -112,7 +109,7 @@ export function formStateReducer(
 
       return createFormStateReducerWithUpdate<FormValue>(
         updateGroup<FormValue>({
-          [a.destinationId]: updateGroup<any>(withValidatio),
+          [a.destinationId]: updateGroup<any>(withValidation),
         })
       )(newFormState, a);
 

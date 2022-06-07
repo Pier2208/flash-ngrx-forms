@@ -4,8 +4,8 @@ import { Store, select } from '@ngrx/store';
 import { Question } from '../models/Question';
 import { ResetAction, SetValueAction } from 'ngrx-forms';
 import { setSubmittedValue } from '../store/flashquote.actions';
-import { filter, map, skip, take } from 'rxjs/operators';
-import { FormValue, SetSubmittedValueAction } from '../store';
+import { filter, map, take } from 'rxjs/operators';
+import { FormValue, SetSubmittedValueAction, State } from '../store';
 import { ActionService } from '../services/action.service';
 
 @Component({
@@ -19,16 +19,17 @@ export class FormComponent implements OnInit {
   submittedValue$: Observable<FormValue | undefined>;
 
   constructor(
-    private store: Store<any>,
+    private store: Store<State>,
     private actionService: ActionService
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
+    // get an Observable for the whole form
     this.formState$ = this.store.pipe(select((s) => {
-      console.log('aqzsedr', s.form.formState)
       return s.form.formState
     }));
 
+    // get all the form's questions
     this.store.subscribe((state) => {
       this.questions = state.form.questions;
     });
@@ -37,10 +38,12 @@ export class FormComponent implements OnInit {
       select((s) => s.form.submittedValue)
     );
 
+    // subscribe to any changes occurring inside the form
     this.formState$.subscribe((state) => {
       for (let control in state.controls) {
-        const question = this.questions.find((q) => q.id == parseInt(control));
-        if (this.hasRules(question)) {
+        const question = this.questions.find((q) => q.id === parseInt(control));
+        // validate rules if question has any
+        if (question && this.hasRules(question)) {
           this.actionService.validate(question, state.controls[control]);
         }
       }
