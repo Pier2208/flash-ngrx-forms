@@ -15,8 +15,3 @@ export const setValue = createAction(
   '[Dialog Set Value] Set Selected Value',
   props<{ control: FormControlState<any>, selectedOptions: string }>()
 );
-
-export const setSubmittedValue = createAction(
-  'form/SET_SUBMITTED_VALUE',
-  props<{ submittedValue: 'hello' }>(),
-);

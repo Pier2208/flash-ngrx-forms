@@ -25,6 +25,7 @@ import { SearchFilterPipe } from './pipes/search-filter.pipe';
 import { MatButtonModule } from '@angular/material/button';
 import { ChipComponent } from './questions/components/chip/chip.component';
 import { RepartitionComponent } from './questions/components/repartition/repartition.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import { RepartitionComponent } from './questions/components/repartition/reparti
   ],
   imports: [
     CommonModule,
+    HttpClientModule,
     FlashquoteRoutingModule,
     NgrxFormsModule,
     MatInputModule,
@@ -56,6 +58,6 @@ import { RepartitionComponent } from './questions/components/repartition/reparti
       reducer
     ),
   ],
-  providers: [FlashquoteResolver]
+  providers: [FlashquoteResolver, HttpClientModule]
 })
 export class FlashquoteModule { }

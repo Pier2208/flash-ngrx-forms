@@ -18,5 +18,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  getFlashFormDTO(marketId: string) {}
+  getFlashFormDTO(marketId: string) {
+    
+  }
 }

@@ -3,11 +3,11 @@ import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { Question } from '../models/Question';
 import { ResetAction, SetValueAction } from 'ngrx-forms';
-import { setSubmittedValue } from '../store/flashquote.actions';
 import { filter, map, take } from 'rxjs/operators';
 import { FormValue, SetSubmittedValueAction, State } from '../store';
 import { ActionService } from '../services/action.service';
 import { Answer } from '../models/Answer';
+import { FlashquoteService } from '../services/flashquote.service';
 
 @Component({
   selector: 'app-form',
@@ -22,7 +22,8 @@ export class FormComponent implements OnInit {
 
   constructor(
     private store: Store<State>,
-    private actionService: ActionService
+    private actionService: ActionService,
+    private flashquoteService: FlashquoteService
   ) { }
 
   ngOnInit() {
@@ -60,14 +61,41 @@ export class FormComponent implements OnInit {
         map((form) => {
           let answers = []
           for (let key in form.value) {
-            const identifier = this.questions.map((q: Question) => q.id === parseInt(key) ? q.identifier : '')[0]
-            answers.push(new Answer(key, '', identifier, form.value[key]))
+            console.log('form value', form.value)
+            if (key === '2885') {
+              for (let responseKey in form.value[2885]) {
+                answers.push(new Answer(key, '', responseKey, (form.value[2885][responseKey] / 100).toString()))
+              }
+            } 
+            else {
+              const identifier = this.questions.find((q: Question) => q.id === parseInt(key))!.identifier
+              answers.push(new Answer(key, '', identifier, form.value[key]))
+            }
           }
-          console.log('aaa', answers)
-          return new SetSubmittedValueAction(answers);
+          const formData = {
+            Code: '5f9ddde6-4601-49e8-ba9c-7e0195ff3344',
+            MarketId: 76,
+            Language: 'en',
+            Answers: answers
+          }
+          return new SetSubmittedValueAction(formData);
         })
+
       )
       .subscribe(this.store);
+
+    this.submittedValue$.subscribe(data => {
+      this.flashquoteService.submitQuote(data)
+      // this.flashquoteService.submitQuote(data).subscribe({
+      //   next: quoteResult => {
+      //     console.log('quote result', quoteResult)
+      //   },
+      //   error: err => {
+      //     console.error(err)
+      //   }
+      // })
+    })
+
 
     // dispatch action to set the form as pristine, untouched and unsubmitted
     //this.store.dispatch(new ResetAction(INITIAL_STATE.id));

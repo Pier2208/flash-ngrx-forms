@@ -3202,16 +3202,34 @@ export class FlashquoteService {
     ]
   }
 
-  constructor() {}
+  constructor(private http: HttpClient) { }
 
   // getFlashFormDTO(marketId:string): Observable<FlashFormDTO> {
   //   return this.http.get<any>(`${environment.apiURL}/api/publicflash/` + marketId);
   // }
 
-  getFlashquote(): Observable<any> {
-    return new Observable(subscriber => {
-      console.log('dodo', this.dataJSON)
-      subscriber.next(this.dataJSON)
-    })
+  // getFlashFormDTO(marketId:string): Observable<FlashFormDTO> {
+  //   return this.http.get<any>(`http://localhost:51668/api/publicflash/` + marketId);
+  // }
+
+  getFlashquote(): Observable<FlashFormDTO> {
+    return this.http.get<any>(`http://localhost:51668/api/publicflash/76`);
+  }
+
+
+
+
+  // getFlashquote(): Observable<any> {
+  //   return new Observable(subscriber => {
+  //     console.log('dodo', this.dataJSON)
+  //     subscriber.next(this.dataJSON)
+  //   })
+  // }
+
+  submitQuote(quote: any) {
+    console.log('quote', quote)
+    // return this.http.post<any>('http://localhost:51668/api/publicflash/', JSON.stringify(quote), {
+    //   headers: { 'Content-Type': 'application/json' }
+    // });
   }
 }

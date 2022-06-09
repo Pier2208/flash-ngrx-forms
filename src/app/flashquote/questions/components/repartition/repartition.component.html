@@ -13,7 +13,7 @@
     <th mat-header-cell *matHeaderCellDef>%</th>
     <td mat-cell *matCellDef="let element">
       <input class="table-input" [ngrxFormControlState]="(groupOptions$ | async)[element.responseKey]" placeholder="0"
-        matInput type="number" value="{{ element.percentage }}" />
+        matInput type="number" value="{{ element.percentage || 0  }}" />
     </td>
     <td mat-footer-cell *matFooterCellDef> {{getTotalPercentage()}} </td>
   </ng-container>
