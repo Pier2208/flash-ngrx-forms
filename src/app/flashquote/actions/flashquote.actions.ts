@@ -8,7 +8,7 @@ export const loadFlashquote = createAction(
 );
 
 export const flashquoteLoaded = createAction(
-  '[Load Flashform Effect] FlashForm Loaded',
+  '[Load Flashform Effect] FLASHQUOTE_LOADED',
   props<{ flashquote: FlashFormDTO }>()
 );
 
@@ -18,26 +18,33 @@ export const setValue = createAction(
 );
 
 // FORM ACTIONS
+
+// export const setSubmittedValue = createAction(
+//   "[Form] SET_SUBMITTED_VALUE",
+//   props<{ formData: any }>()
+// );
+
+// OLD WAY
 export class SetSubmittedValueAction implements Action {
   static readonly TYPE = 'form/SET_SUBMITTED_VALUE';
   readonly type = SetSubmittedValueAction.TYPE;
-  constructor(public submittedValue: any) {}
+  constructor(public submittedValue: any) { }
 }
 
 export class FlashquoteLoadedAction implements Action {
   static readonly TYPE = 'form/FLASHQUOTE_LOADED';
   readonly type = FlashquoteLoadedAction.TYPE;
-  constructor(public name: string, public flashquote: FlashFormDTO) {}
+  constructor(public name: string, public flashquote: FlashFormDTO) { }
 }
 
 export class CreateGroupElementAction implements Action {
   static readonly TYPE = 'form/CREATE_GROUP_ELEMENT';
   readonly type = CreateGroupElementAction.TYPE;
-  constructor(public responseKey: any, public destinationId: any) {}
+  constructor(public responseKey: any, public destinationId: any) { }
 }
 
 export class RemoveGroupElementAction implements Action {
   static readonly TYPE = 'form/REMOVE_GROUP_ELEMENT';
   readonly type = RemoveGroupElementAction.TYPE;
-  constructor(public responseKey: any, public destinationId: any) {}
+  constructor(public responseKey: any, public destinationId: any) { }
 }

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { Question } from '../models/Question';
 import { ResetAction, SetValueAction } from 'ngrx-forms';
@@ -9,17 +9,19 @@ import { ActionService } from '../services/action.service';
 import { Answer } from '../models/Answer';
 import { FlashquoteService } from '../services/flashquote.service';
 import { SetSubmittedValueAction } from '../actions/flashquote.actions';
+import { selectQuestions, selectFormState, selectSubmittedValue } from '../selectors';
 
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class FormComponent implements OnInit {
-  formState$: Observable<any>;
+export class FormComponent implements OnInit, OnDestroy {
   questions: Question[];
+  formState$: Observable<any>;
   submittedValue$: Observable<FormValue | undefined>;
   answers: Answer[];
+  formSubscription: Subscription;
 
   constructor(
     private store: Store<State>,
@@ -28,30 +30,46 @@ export class FormComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // get an Observable for the whole form
-    this.formState$ = this.store.pipe(select((s) => {
-      return s.form.formState
-    }));
+    this.getFormState()
+    this.getQuestions()
+    this.getSubmittedValue()
 
-    // get all the form's questions
-    this.store.subscribe((state) => {
-      this.questions = state.form.questions;
-    });
+    this.onFormChange()
+  }
 
-    this.submittedValue$ = this.store.pipe(
-      select((s) => s.form.submittedValue)
-    );
+  ngOnDestroy() {
+    this.formSubscription.unsubscribe()
+  }
 
-    // subscribe to any changes occurring inside the form
-    this.formState$.subscribe((state) => {
+  onFormChange() {
+    this.formSubscription = this.formState$.subscribe((state) => {
       for (let control in state.controls) {
         const question = this.questions.find((q) => q.id === parseInt(control));
-        // validate rules if question has any
+        //validate rules if question has any
         if (question && this.hasRules(question)) {
           this.actionService.validate(question, state.controls[control]);
         }
       }
     });
+  }
+
+  getQuestions() {
+    this.store.pipe(select(selectQuestions)).subscribe(data => {
+      this.questions = data
+    })
+  }
+
+  getFormState() {
+    this.formState$ = this.store.pipe(select(selectFormState))
+  }
+
+  getSubmittedValue() {
+    this.submittedValue$ = this.store.pipe(select(selectSubmittedValue))
+  }
+
+  //check ifa question has rules
+  hasRules(question: Question | undefined) {
+    return question?.rules.length ? true : false;
   }
 
   submit() {
@@ -62,12 +80,11 @@ export class FormComponent implements OnInit {
         map((form) => {
           let answers = []
           for (let key in form.value) {
-            console.log('form value', form.value)
             if (key === '2885') {
               for (let responseKey in form.value[2885]) {
                 answers.push(new Answer(key, '', responseKey, (form.value[2885][responseKey] / 100).toString()))
               }
-            } 
+            }
             else {
               const identifier = this.questions.find((q: Question) => q.id === parseInt(key))!.identifier
               answers.push(new Answer(key, '', identifier, form.value[key]))
@@ -81,7 +98,6 @@ export class FormComponent implements OnInit {
           }
           return new SetSubmittedValueAction(formData);
         })
-
       )
       .subscribe(this.store);
 
@@ -102,9 +118,5 @@ export class FormComponent implements OnInit {
     //this.store.dispatch(new ResetAction(INITIAL_STATE.id));
     // this.store.dispatch(new SetValueAction(INITIAL_STATE.id, INITIAL_STATE.value));
   }
-
-  // check if a question has rules
-  hasRules(question: Question | undefined) {
-    return question?.rules.length ? true : false;
-  }
 }
+

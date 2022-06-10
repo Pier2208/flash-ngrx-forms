@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { FormControlState, FormState } from 'ngrx-forms';
 import { Question } from '../models/Question';
 import { Response } from '../models/Response';
@@ -8,6 +8,7 @@ import {
   State,
 } from '../store';
 import { CreateGroupElementAction, RemoveGroupElementAction } from '../actions/flashquote.actions';
+import { selectQuestions, selectFormState } from '../selectors';
 
 
 @Injectable({
@@ -18,10 +19,12 @@ export class ActionService {
   formState: FormState<FormValue>;
 
   constructor(private store: Store<State>) {
-    this.store.subscribe((state) => {
-      this.questions = state.form.questions;
-      this.formState = state.form.formState;
-    });
+    this.store.pipe(select(selectQuestions)).subscribe(questions => {
+      this.questions = questions
+    })
+    this.store.pipe(select(selectFormState)).subscribe(state => {
+      this.formState = state
+    })
   }
 
   validate(question: Question, control: FormControlState<any>) {
