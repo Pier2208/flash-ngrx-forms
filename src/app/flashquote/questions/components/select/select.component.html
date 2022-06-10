@@ -31,7 +31,7 @@
   <mat-chip-list>
     <app-chip
       *ngFor="let option of question.responses"
-      (click)="select(option.id)"
+      (click)="select(option)"
       [selected]="isSelected(option.id)"
     >
       {{ option.label.LabelEn }}

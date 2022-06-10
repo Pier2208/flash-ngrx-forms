@@ -64,8 +64,8 @@ export class SelectComponent {
     this.setControlValue();
   }
 
-  select(option: string) {
-    const optionIndex = this.options.findIndex((opt) => opt.id === option);
+  select(option: any) {
+    const optionIndex = this.options.findIndex((opt) => opt.id === option.id);
     // if question does not allow multiple options, reset selectedOptions before select
     if (this.question.type !== 'MULTIPLE') this.selectedOptions = [];
 
@@ -75,7 +75,7 @@ export class SelectComponent {
     } else {
       this.selectedOptions.splice(index, 1);
     }
-    this.store.dispatch(new SetValueAction(this.control.id, option));
+    this.store.dispatch(new SetValueAction(this.control.id, option.responseKey));
   }
 
 

@@ -8,10 +8,11 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { tap, first, finalize } from 'rxjs/operators';
 import { AppState } from '../reducers/app.reducer';
-import { loadFlashquote } from './store/flashquote.actions';
+import { FlashFormDTO } from './models/Flashquote';
+import { loadFlashquote } from './actions/flashquote.actions';
 
 @Injectable()
-export class FlashquoteResolver implements Resolve<any> {
+export class FlashquoteResolver implements Resolve<FlashFormDTO> {
   loading = false;
   constructor(private store: Store<AppState>) {}
 
@@ -23,7 +24,9 @@ export class FlashquoteResolver implements Resolve<any> {
       tap(() => {
         if (!this.loading) {
           this.loading = true;
-          this.store.dispatch(loadFlashquote());
+            this.store.dispatch(
+              loadFlashquote({ marketId: route.params.marketId })
+            );
         }
       }),
       first(),

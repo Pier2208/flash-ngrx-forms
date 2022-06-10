@@ -4,11 +4,10 @@ import { FormControlState, FormState } from 'ngrx-forms';
 import { Question } from '../models/Question';
 import { Response } from '../models/Response';
 import {
-  CreateGroupElementAction,
   FormValue,
-  RemoveGroupElementAction,
   State,
 } from '../store';
+import { CreateGroupElementAction, RemoveGroupElementAction } from '../actions/flashquote.actions';
 
 
 @Injectable({

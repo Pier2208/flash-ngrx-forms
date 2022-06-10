@@ -4,10 +4,11 @@ import { Store, select } from '@ngrx/store';
 import { Question } from '../models/Question';
 import { ResetAction, SetValueAction } from 'ngrx-forms';
 import { filter, map, take } from 'rxjs/operators';
-import { FormValue, SetSubmittedValueAction, State } from '../store';
+import { FormValue, State } from '../store';
 import { ActionService } from '../services/action.service';
 import { Answer } from '../models/Answer';
 import { FlashquoteService } from '../services/flashquote.service';
+import { SetSubmittedValueAction } from '../actions/flashquote.actions';
 
 @Component({
   selector: 'app-form',

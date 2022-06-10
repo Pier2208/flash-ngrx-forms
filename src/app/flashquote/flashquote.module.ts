@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './home/home.component';
 import { FlashquoteRoutingModule } from './flashquote-routing.module';
-import { FlashquoteEffects } from './store/flashquote.effects';
+import { FlashquoteEffects } from './flashquote.effects';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { FlashquoteResolver } from './flashquote.resolver';
-import {reducer} from './store/index';
+import { reducer} from './reducers'
 import { FormComponent } from './form/form.component';
 import { NgrxFormsModule } from 'ngrx-forms';
 import { QuestionBaseComponent } from './questions/question-base/question-base.component';

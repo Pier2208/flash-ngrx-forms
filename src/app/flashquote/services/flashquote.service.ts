@@ -10,7 +10,7 @@ import { FlashFormDTO } from '../models/Flashquote';
 export class FlashquoteService {
 
   dataJSON = {
-    marketId: 0,
+    marketId: 76,
     questions: [
       {
         id: 60,
@@ -3208,15 +3208,9 @@ export class FlashquoteService {
   //   return this.http.get<any>(`${environment.apiURL}/api/publicflash/` + marketId);
   // }
 
-  // getFlashFormDTO(marketId:string): Observable<FlashFormDTO> {
-  //   return this.http.get<any>(`http://localhost:51668/api/publicflash/` + marketId);
-  // }
-
-  getFlashquote(): Observable<FlashFormDTO> {
-    return this.http.get<any>(`http://localhost:51668/api/publicflash/76`);
+  getFlashquote(marketId: string): Observable<FlashFormDTO> {
+    return this.http.get<any>(`http://localhost:51668/api/publicflash/` + marketId);
   }
-
-
 
 
   // getFlashquote(): Observable<any> {
