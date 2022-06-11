@@ -3,7 +3,6 @@
     <app-input
       [question]="question"
       [control]="control"
-      [error]="error"
     ></app-input>
   </div>
 
@@ -11,7 +10,6 @@
     <app-input
       [question]="question"
       [control]="control"
-      [error]="error"
     ></app-input>
   </div>
 
@@ -26,4 +24,5 @@
   <div *ngSwitchCase="'REPARTITION'">
     <app-repartition [question]="question" [control]="control"></app-repartition>
   </div>
+  <ng-content></ng-content>
 </div>

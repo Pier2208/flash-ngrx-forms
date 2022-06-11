@@ -9,7 +9,7 @@ import { ActionService } from '../services/action.service';
 import { Answer } from '../models/Answer';
 import { FlashquoteService } from '../services/flashquote.service';
 import { SetSubmittedValueAction } from '../actions/flashquote.actions';
-import { selectQuestions, selectFormState, selectSubmittedValue } from '../selectors';
+import { selectQuestions, selectFormState, selectSubmittedValue, selectErrors } from '../selectors';
 
 @Component({
   selector: 'app-form',
@@ -18,6 +18,7 @@ import { selectQuestions, selectFormState, selectSubmittedValue } from '../selec
 })
 export class FormComponent implements OnInit, OnDestroy {
   questions: Question[];
+  errors$: Observable<any>;
   formState$: Observable<any>;
   submittedValue$: Observable<FormValue | undefined>;
   answers: Answer[];
@@ -33,6 +34,7 @@ export class FormComponent implements OnInit, OnDestroy {
     this.getFormState()
     this.getQuestions()
     this.getSubmittedValue()
+    this.getErrors()
 
     this.onFormChange()
   }
@@ -57,6 +59,10 @@ export class FormComponent implements OnInit, OnDestroy {
     this.store.pipe(select(selectQuestions)).subscribe(data => {
       this.questions = data
     })
+  }
+
+  getErrors() {
+    this.errors$ = this.store.pipe(select(selectErrors))
   }
 
   getFormState() {

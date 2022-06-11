@@ -26,6 +26,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ChipComponent } from './questions/components/chip/chip.component';
 import { RepartitionComponent } from './questions/components/repartition/repartition.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ErrorComponent } from './questions/components/error/error.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { HttpClientModule } from '@angular/common/http';
     SelectDialogComponent,
     SearchFilterPipe,
     ChipComponent,
-    RepartitionComponent
+    RepartitionComponent,
+    ErrorComponent
   ],
   imports: [
     CommonModule,

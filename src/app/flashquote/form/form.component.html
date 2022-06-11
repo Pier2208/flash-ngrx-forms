@@ -6,15 +6,15 @@
         [question]="question"
         [control]="formState.controls[question.id]"
       >
+        <app-error [control]="formState.controls[question.id]" [error]="(errors$ | async)['_' + question.id]"> </app-error>
       </app-question-base>
     </ng-container>
+
     <button
       type="submit"
       mat-raised-button
       color="primary"
-      [disabled]="
-        formState.isPristine && formState.isUntouched && formState.isUnsubmitted
-      "
+      [disabled]="formState.isPristine && formState.isUntouched && formState.isUnsubmitted && formState.isInvalid"
     >
       Soumettre
     </button>

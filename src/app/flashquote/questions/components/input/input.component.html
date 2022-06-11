@@ -2,6 +2,3 @@
   <mat-label>{{ question.title.LabelEn }}</mat-label>
   <input type="{{ inputType }}" matInput [ngrxFormControlState]="control" />
 </mat-form-field>
-<mat-error *ngIf="error?.required">
-  <small>A user name is required</small>
-</mat-error>
