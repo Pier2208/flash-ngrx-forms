@@ -27,8 +27,7 @@ export function formStateReducer(
         }, {});
   
         s = createFormGroupState<FormValue>(FORM_ID, {
-          60: '',
-          62: '',
+          2891: '',
           1532: '',
           1533: '',
           2879: '',
@@ -92,7 +91,7 @@ export function formStateReducer(
       default:
         return createFormStateReducerWithUpdate<FormValue>(
           updateGroup<FormValue>({
-            60: validate(required),
+            2891: validate(required),
             1532: validate(required),
             1533: validate(required),
             2879: validate(required),

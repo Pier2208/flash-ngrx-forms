@@ -108,15 +108,15 @@ export class FormComponent implements OnInit, OnDestroy {
       .subscribe(this.store);
 
     this.submittedValue$.subscribe(data => {
-      this.flashquoteService.submitQuote(data)
-      // this.flashquoteService.submitQuote(data).subscribe({
-      //   next: quoteResult => {
-      //     console.log('quote result', quoteResult)
-      //   },
-      //   error: err => {
-      //     console.error(err)
-      //   }
-      // })
+      // this.flashquoteService.submitQuote(data)
+      this.flashquoteService.submitQuote(data).subscribe({
+        next: quoteResult => {
+          console.log('quote result', quoteResult)
+        },
+        error: err => {
+          console.error(err)
+        }
+      })
     })
 
 

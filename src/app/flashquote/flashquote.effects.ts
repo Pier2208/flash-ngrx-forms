@@ -11,8 +11,8 @@ export class FlashquoteEffects {
   loadFlashquote$ = createEffect(() =>
     this.actions$.pipe(
       ofType(FlashquoteActions.loadFlashquote),
-      // concatMap((action) => this.flashquoteService.getFlashquote(action.marketId)),
-      concatMap((action) => this.flashquoteService.getFlashquote()),
+      concatMap((action) => this.flashquoteService.getFlashquote(action.marketId)),
+      // concatMap((action) => this.flashquoteService.getFlashquote()),
       map((flashquote: FlashFormDTO ) => {
         return new FlashquoteLoadedAction('FLASHQUOTE_LOADED', flashquote)
       })
