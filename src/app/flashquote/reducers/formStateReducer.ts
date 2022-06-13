@@ -1,5 +1,5 @@
 import { addGroupControl, createFormGroupState, createFormStateReducerWithUpdate, FormGroupState, removeGroupControl, updateGroup, validate } from "ngrx-forms";
-import { required } from "ngrx-forms/validation";
+import { lessThanOrEqualTo, required } from "ngrx-forms/validation";
 import { Question } from "../models/Question";
 import { FormValue } from "../store";
 import { CreateGroupElementAction, FlashquoteLoadedAction, RemoveGroupElementAction } from "../actions/flashquote.actions";
@@ -19,6 +19,9 @@ export function formStateReducer(
         a.flashquote.questions.reduce((acc: any, question: Question) => {
           if (question.isRequired) {
             acc[question.id] = validate(required);
+          }
+          if (question.maxLength) {
+            acc[question.id] = validate(lessThanOrEqualTo(99));
           }
           return acc;
         }, {});
