@@ -8,7 +8,7 @@ import {
   State,
 } from '../store';
 import { CreateGroupElementAction, RemoveGroupElementAction } from '../actions/flashquote.actions';
-import { selectQuestions, selectFormState } from '../selectors';
+import { selectFormState, selectQuestions } from '../selectors';
 
 
 @Injectable({

@@ -1,8 +1,8 @@
 import { Action, combineReducers } from "@ngrx/store";
 import { FormValue, State } from "../store";
 import { SetSubmittedValueAction } from "../actions/flashquote.actions";
-import { formStateReducer } from "./formStateReducer";
 import { questionsReducer } from "./questionsReducer";
+import { formStateReducer } from "./formStateReducer";
 
 const reducers = combineReducers<State['form'], any>({
     questions: questionsReducer,

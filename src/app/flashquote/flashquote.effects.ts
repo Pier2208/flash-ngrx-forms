@@ -5,41 +5,39 @@ import { FlashquoteService } from './services/flashquote.service';
 import { FlashFormDTO } from './models/Flashquote';
 import { concatMap, map, switchMap } from 'rxjs/operators';
 import { FlashquoteLoadedAction } from './actions/flashquote.actions';
-import { AddGroupControlAction } from 'ngrx-forms';
-
-// @Injectable()
-// export class FlashquoteEffects {
-//   loadFlashquote$ = createEffect(() =>
-//     this.actions$.pipe(
-//       ofType(FlashquoteActions.loadFlashquote),
-//       concatMap((action) => this.flashquoteService.getFlashquote(action.marketId)),
-//       // concatMap((action) => this.flashquoteService.getFlashquote()),
-//       map((flashquote: any) => {
-//         // return new FlashquoteLoadedAction('FLASHQUOTE_LOADED', flashquote)
-//         localStorage.setItem("flash", JSON.stringify(flashquote))
-//           return new AddGroupControlAction('contracteur_v2', 'hello', '')
-//       })
-//     )
-//   );
+import { AddGroupControlAction,} from 'ngrx-forms';
 
 @Injectable()
 export class FlashquoteEffects {
   loadFlashquote$ = createEffect(() =>
     this.actions$.pipe(
       ofType(FlashquoteActions.loadFlashquote),
-      concatMap((action) => this.flashquoteService.getFlashquote(action.marketId)),
-      // concatMap((action) => this.flashquoteService.getFlashquote()),
-      map((flashquote: any)=> {
+      //concatMap((action) => this.flashquoteService.getFlashquote(action.marketId)),
+      concatMap((action) => this.flashquoteService.getFlashquote()),
+      switchMap((flashquote: any) => {
         return flashquote.questions.map((q: any) => {
-          return new AddGroupControlAction('contracteur_v2', q.id, '')
-        })
+          if (q.type === 'REPARTITION')
+            return new AddGroupControlAction('contracteur_v2', q.id, {});
+          return new AddGroupControlAction('contracteur_v2', q.id, '');
+        });
       }),
-      switchMap((res: any) => [...res])
-  ))
+      switchMap((res: any) => [res])
+    )
+  );
 
+  loadQuestions$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(FlashquoteActions.loadFlashquote),
+      concatMap((action) => this.flashquoteService.getFlashquote()),
+      //concatMap((action) => this.flashquoteService.getFlashquote(action.marketId)),
+      map((flashquote: FlashFormDTO) => {
+        return new FlashquoteLoadedAction('FLASHQUOTE_LOADED', flashquote);
+      })
+    )
+  );
 
   constructor(
     private actions$: Actions,
     private flashquoteService: FlashquoteService
-  ) { }
+  ) {}
 }

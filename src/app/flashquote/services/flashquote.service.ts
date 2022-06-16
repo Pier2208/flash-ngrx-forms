@@ -3204,23 +3204,23 @@ export class FlashquoteService {
 
   constructor(private http: HttpClient) { }
 
-  getFlashquote(marketId: string): Observable<FlashFormDTO> {
-    return this.http.get<any>(`http://localhost:51668/api/publicflash/` + marketId);
-  }
-
-
-  // getFlashquote(): Observable<any> {
-  //   return new Observable(subscriber => {
-  //     console.log('dodo', this.dataJSON)
-  //     subscriber.next(this.dataJSON)
-  //   })
+  // getFlashquote(marketId: string): Observable<FlashFormDTO> {
+  //   return this.http.get<any>(`http://localhost:51668/api/publicflash/` + marketId);
   // }
+
+
+  getFlashquote(): Observable<any> {
+    return new Observable(subscriber => {
+      console.log('dodo', this.dataJSON)
+      subscriber.next(this.dataJSON)
+    })
+  }
 
 
   submitQuote(quote: any) {
     console.log('quote', quote)
-    return this.http.post<any>('http://localhost:51668/api/publicflash/', JSON.stringify(quote), {
-      headers: { 'Content-Type': 'application/json' }
-    });
+    // return this.http.post<any>('http://localhost:51668/api/publicflash/', JSON.stringify(quote), {
+    //   headers: { 'Content-Type': 'application/json' }
+    // });
   }
 }

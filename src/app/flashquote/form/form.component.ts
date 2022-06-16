@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { Store, select } from '@ngrx/store';
+import { Store, select, INIT } from '@ngrx/store';
 import { Question } from '../models/Question';
 import { ResetAction, SetValueAction } from 'ngrx-forms';
 import { filter, map, take } from 'rxjs/operators';
@@ -9,7 +9,10 @@ import { ActionService } from '../services/action.service';
 import { Answer } from '../models/Answer';
 import { FlashquoteService } from '../services/flashquote.service';
 import { SetSubmittedValueAction } from '../actions/flashquote.actions';
-import { selectQuestions, selectFormState, selectSubmittedValue, selectErrors } from '../selectors';
+import { selectQuestions, selectFormState, selectSubmittedValue, selectErrors, selectFormValid } from '../selectors';
+import { INITIAL_STATE } from '../reducers/formStateReducer';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-form',
@@ -20,6 +23,7 @@ export class FormComponent implements OnInit, OnDestroy {
   questions: Question[];
   errors$: Observable<any>;
   formState$: Observable<any>;
+  formValid$: Observable<boolean>
   submittedValue$: Observable<FormValue | undefined>;
   answers: Answer[];
   formSubscription: Subscription;
@@ -27,13 +31,15 @@ export class FormComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<State>,
     private actionService: ActionService,
-    private flashquoteService: FlashquoteService
+    private flashquoteService: FlashquoteService,
+    private router: Router
   ) { }
 
   ngOnInit() {
     this.getFormState()
     this.getQuestions()
     this.getSubmittedValue()
+    this.getFormValid()
     this.getErrors()
 
     this.onFormChange()
@@ -69,11 +75,15 @@ export class FormComponent implements OnInit, OnDestroy {
     this.formState$ = this.store.pipe(select(selectFormState))
   }
 
+  getFormValid() {
+    this.formValid$ = this.store.pipe(select(selectFormValid))
+  }
+
   getSubmittedValue() {
     this.submittedValue$ = this.store.pipe(select(selectSubmittedValue))
   }
 
-  //check ifa question has rules
+  //check if a question has rules
   hasRules(question: Question | undefined) {
     return question?.rules.length ? true : false;
   }
@@ -108,21 +118,22 @@ export class FormComponent implements OnInit, OnDestroy {
       .subscribe(this.store);
 
     this.submittedValue$.subscribe(data => {
-      // this.flashquoteService.submitQuote(data)
-      this.flashquoteService.submitQuote(data).subscribe({
-        next: quoteResult => {
-          console.log('quote result', quoteResult)
-        },
-        error: err => {
-          console.error(err)
-        }
-      })
+      this.flashquoteService.submitQuote(data)
+      // this.flashquoteService.submitQuote(data).subscribe({
+      //   next: quoteResult => {
+      //     console.log('quote result', quoteResult)
+      //   },
+      //   error: err => {
+      //     console.error(err)
+      //   }
+      // })
     })
 
 
     // dispatch action to set the form as pristine, untouched and unsubmitted
-    //this.store.dispatch(new ResetAction(INITIAL_STATE.id));
-    // this.store.dispatch(new SetValueAction(INITIAL_STATE.id, INITIAL_STATE.value));
+    this.store.dispatch(new ResetAction(INITIAL_STATE.id));
+    // this.store.dispatch(new SetValueAction(INITIAL_STATE.id, {}));
+    this.router.navigate(['/prime'])
   }
 }
 

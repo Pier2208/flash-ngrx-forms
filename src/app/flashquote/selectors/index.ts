@@ -1,6 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { State } from '../store';
-import * as fromQuestions from '../reducers/questionsReducer';
 
 // Feature selector
 export const selectForm = createFeatureSelector<State['form']>('form');
@@ -15,6 +14,11 @@ export const selectFormState = createSelector(
   selectForm,
   (state) => state.formState
 );
+
+export const selectFormValid = createSelector(
+    selectForm,
+    (state) => state.formState.isValid
+  );
 
 export const selectSubmittedValue = createSelector(
   selectForm,

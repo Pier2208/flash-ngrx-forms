@@ -27,6 +27,7 @@ import { ChipComponent } from './questions/components/chip/chip.component';
 import { RepartitionComponent } from './questions/components/repartition/repartition.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ErrorComponent } from './questions/components/error/error.component';
+import { PrimeComponent } from './prime/prime.component';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { ErrorComponent } from './questions/components/error/error.component';
     SearchFilterPipe,
     ChipComponent,
     RepartitionComponent,
-    ErrorComponent
+    ErrorComponent,
+    PrimeComponent
   ],
   imports: [
     CommonModule,

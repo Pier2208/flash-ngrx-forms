@@ -17,14 +17,7 @@ export const setValue = createAction(
   props<{ control: FormControlState<any>; selectedOptions: string }>()
 );
 
-// FORM ACTIONS
 
-// export const setSubmittedValue = createAction(
-//   "[Form] SET_SUBMITTED_VALUE",
-//   props<{ formData: any }>()
-// );
-
-// OLD WAY
 export class SetSubmittedValueAction implements Action {
   static readonly TYPE = 'form/SET_SUBMITTED_VALUE';
   readonly type = SetSubmittedValueAction.TYPE;
