@@ -28,6 +28,7 @@ import { RepartitionComponent } from './questions/components/repartition/reparti
 import { HttpClientModule } from '@angular/common/http';
 import { ErrorComponent } from './questions/components/error/error.component';
 import { PrimeComponent } from './prime/prime.component';
+import { InputNumberFormatDirective } from './directives/input-number-format.directive';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { PrimeComponent } from './prime/prime.component';
     ChipComponent,
     RepartitionComponent,
     ErrorComponent,
-    PrimeComponent
+    PrimeComponent,
+    InputNumberFormatDirective
   ],
   imports: [
     CommonModule,

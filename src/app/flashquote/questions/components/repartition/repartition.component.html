@@ -1,5 +1,6 @@
 <table
-  *ngIf="responseList.length" @fadeSlideIn
+  *ngIf="responseList.length"
+  @fadeSlideIn
   mat-table
   [dataSource]="responseList"
   class="table"
@@ -18,12 +19,14 @@
     <th mat-header-cell *matHeaderCellDef>%</th>
     <td mat-cell *matCellDef="let element">
       <input
+        InputNumberFormat
         class="table-input"
         [ngrxFormControlState]="(groupOptions$ | async)[element.responseKey]"
         placeholder="0"
         matInput
-        type="text"
-        value="{{ element.percentage || 0 }}"
+        min="0"
+        max="100"
+        type="number"
       />
     </td>
     <td mat-footer-cell *matFooterCellDef>{{ getTotalPercentage() }}</td>

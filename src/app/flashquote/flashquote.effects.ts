@@ -5,7 +5,8 @@ import { FlashquoteService } from './services/flashquote.service';
 import { FlashFormDTO } from './models/Flashquote';
 import { concatMap, map, switchMap } from 'rxjs/operators';
 import { FlashquoteLoadedAction } from './actions/flashquote.actions';
-import { AddGroupControlAction,} from 'ngrx-forms';
+import { AddGroupControlAction, createFormGroupState, validate, } from 'ngrx-forms';
+import { lessThanOrEqualTo } from 'ngrx-forms/validation';
 
 @Injectable()
 export class FlashquoteEffects {
@@ -39,5 +40,5 @@ export class FlashquoteEffects {
   constructor(
     private actions$: Actions,
     private flashquoteService: FlashquoteService
-  ) {}
+  ) { }
 }
