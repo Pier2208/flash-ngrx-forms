@@ -1,18 +1,24 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { Store, select, INIT } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Question } from '../models/Question';
-import { ResetAction, SetValueAction } from 'ngrx-forms';
+import { FormGroupState, ResetAction, SetValueAction } from 'ngrx-forms';
 import { filter, map, take } from 'rxjs/operators';
 import { FormValue, State } from '../store';
 import { ActionService } from '../services/action.service';
 import { Answer } from '../models/Answer';
 import { FlashquoteService } from '../services/flashquote.service';
 import { SetSubmittedValueAction } from '../actions/flashquote.actions';
-import { selectQuestions, selectFormState, selectSubmittedValue, selectErrors, selectFormValid } from '../selectors';
+import {
+  selectQuestions,
+  selectFormState,
+  selectSubmittedValue,
+  selectErrors,
+  selectFormValid,
+  selectFormSubmitted,
+} from '../selectors';
 import { INITIAL_STATE } from '../reducers/formStateReducer';
 import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-form',
@@ -23,7 +29,8 @@ export class FormComponent implements OnInit, OnDestroy {
   questions: Question[];
   errors$: Observable<any>;
   formState$: Observable<any>;
-  formValid$: Observable<boolean>
+  formValid$: Observable<boolean>;
+  formSubmitted$: Observable<boolean>;
   submittedValue$: Observable<FormValue | undefined>;
   answers: Answer[];
   formSubscription: Subscription;
@@ -36,17 +43,18 @@ export class FormComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.getFormState()
-    this.getQuestions()
-    this.getSubmittedValue()
-    this.getFormValid()
-    this.getErrors()
+    this.getFormState();
+    this.getQuestions();
+    this.getSubmittedValue();
+    this.getFormValid();
+    this.getFormSubmitted();
+    this.getErrors();
 
-    this.onFormChange()
+    this.onFormChange();
   }
 
   ngOnDestroy() {
-    this.formSubscription.unsubscribe()
+    this.formSubscription.unsubscribe();
   }
 
   onFormChange() {
@@ -62,25 +70,29 @@ export class FormComponent implements OnInit, OnDestroy {
   }
 
   getQuestions() {
-    this.store.pipe(select(selectQuestions)).subscribe(data => {
-      this.questions = data
-    })
+    this.store.pipe(select(selectQuestions)).subscribe((data) => {
+      this.questions = data;
+    });
   }
 
   getErrors() {
-    this.errors$ = this.store.pipe(select(selectErrors))
+    this.errors$ = this.store.pipe(select(selectErrors));
   }
 
   getFormState() {
-    this.formState$ = this.store.pipe(select(selectFormState))
+    this.formState$ = this.store.pipe(select(selectFormState));
   }
 
   getFormValid() {
-    this.formValid$ = this.store.pipe(select(selectFormValid))
+    this.formValid$ = this.store.pipe(select(selectFormValid));
+  }
+
+  getFormSubmitted() {
+    this.formSubmitted$ = this.store.pipe(select(selectFormSubmitted));
   }
 
   getSubmittedValue() {
-    this.submittedValue$ = this.store.pipe(select(selectSubmittedValue))
+    this.submittedValue$ = this.store.pipe(select(selectSubmittedValue));
   }
 
   //check if a question has rules
@@ -88,37 +100,57 @@ export class FormComponent implements OnInit, OnDestroy {
     return question?.rules.length ? true : false;
   }
 
+  // submit() {
+  //   this.formState$.pipe(
+  //     take(1),
+  //     filter(s => {
+  //       console.log('state', s)
+  //       return s.isValid
+  //     }),
+  //     map(fs => new SetSubmittedValueAction(fs.value)),
+  //   ).subscribe(this.store);
+  // }
   submit() {
     this.formState$
       .pipe(
         take(1),
-        filter((state) => state.isValid),
+        filter((state) => {
+          return state.isValid;
+        }),
         map((form) => {
-          let answers = []
+          let answers = [];
           for (let key in form.value) {
             if (key === '2885') {
               for (let responseKey in form.value[2885]) {
-                answers.push(new Answer(key, '', responseKey, (form.value[2885][responseKey] / 100).toString()))
+                answers.push(
+                  new Answer(
+                    key,
+                    '',
+                    responseKey,
+                    (form.value[2885][responseKey] / 100).toString()
+                  )
+                );
               }
-            }
-            else {
-              const identifier = this.questions.find((q: Question) => q.id === parseInt(key))!.identifier
-              answers.push(new Answer(key, '', identifier, form.value[key]))
+            } else {
+              const identifier = this.questions.find(
+                (q: Question) => q.id === parseInt(key)
+              )!.identifier;
+              answers.push(new Answer(key, '', identifier, form.value[key]));
             }
           }
           const formData = {
             Code: '5f9ddde6-4601-49e8-ba9c-7e0195ff3344',
             MarketId: 76,
             Language: 'en',
-            Answers: answers
-          }
+            Answers: answers,
+          };
           return new SetSubmittedValueAction(formData);
         })
       )
       .subscribe(this.store);
 
-    this.submittedValue$.subscribe(data => {
-      this.flashquoteService.submitQuote(data)
+    this.submittedValue$.subscribe((data) => {
+      if (data) this.flashquoteService.submitQuote(data);
       // this.flashquoteService.submitQuote(data).subscribe({
       //   next: quoteResult => {
       //     console.log('quote result', quoteResult)
@@ -127,13 +159,11 @@ export class FormComponent implements OnInit, OnDestroy {
       //     console.error(err)
       //   }
       // })
-    })
-
+    });
 
     // dispatch action to set the form as pristine, untouched and unsubmitted
-    this.store.dispatch(new ResetAction(INITIAL_STATE.id));
+    //this.store.dispatch(new ResetAction(INITIAL_STATE.id));
     // this.store.dispatch(new SetValueAction(INITIAL_STATE.id, {}));
-    this.router.navigate(['/prime'])
+    //this.router.navigate(['/prime'])
   }
 }
-

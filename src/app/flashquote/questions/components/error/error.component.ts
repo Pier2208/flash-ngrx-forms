@@ -12,6 +12,6 @@ export class ErrorComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    console.log('control', this.control)
+    console.log('error', this.error)
   }
 }

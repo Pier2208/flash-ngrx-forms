@@ -10,15 +10,25 @@ export const selectQuestions = createSelector(
   (state) => state.questions
 );
 
+export const selectAllQuestionsLoaded = createSelector(
+  selectForm,
+  (state) => !!state.questions
+);
+
 export const selectFormState = createSelector(
   selectForm,
   (state) => state.formState
 );
 
 export const selectFormValid = createSelector(
-    selectForm,
-    (state) => state.formState.isValid
-  );
+  selectForm,
+  (state) => state.formState.isValid
+);
+
+export const selectFormSubmitted = createSelector(
+  selectForm,
+  (state) => state.formState.isSubmitted
+);
 
 export const selectSubmittedValue = createSelector(
   selectForm,

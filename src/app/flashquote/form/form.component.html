@@ -18,7 +18,7 @@
       type="submit"
       mat-raised-button
       color="primary"
-      [disabled]="!(formValid$ | async)"
+      [disabled]="!(formValid$ | async) && (formSubmitted$ | async)"
     >
       Soumettre
     </button>

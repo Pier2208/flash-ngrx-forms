@@ -8,8 +8,10 @@ import {
   StateUpdateFns,
   updateGroup,
   validate,
+  wrapReducerWithFormStateUpdate,
 } from 'ngrx-forms';
 import {
+  lessThanOrEqualTo,
   required
 } from 'ngrx-forms/validation';
 import { FormValue } from '../store';
@@ -29,9 +31,12 @@ export const validateForm = (s: FormGroupState<any> = INITIAL_STATE) => {
     }),
     {} as StateUpdateFns<typeof s.value>
   );
-
   return updateGroup(s, updateFns);
 };
+
+export const validationReducer = updateGroup<any>({
+  key: validate([required])
+})
 
 export function formStateReducer(
   s: FormGroupState<any> = INITIAL_STATE,
@@ -55,11 +60,20 @@ export function formStateReducer(
       if (!(a.responseKey in value)) {
         const newS = updateGroup<FormValue>({
           [a.destinationId]: (group: any) => {
-            return addGroupControl(group, a.responseKey, null);
-          },
+            const newG = addGroupControl(group, a.responseKey, null)
+            console.log(newG.controls)
+            const updateFns = Object.keys(newG.controls).reduce(
+              (fns, key) => ({
+                ...fns,
+                [key]: validate(required),
+              }),
+              {} as StateUpdateFns<typeof s.value>
+            );
+            console.log('ertyuio', updateFns)
+            return updateGroup(s, updateFns);
+          }
         })(s);
-
-        return formGroupReducer(newS, a);
+        return validateForm(formGroupReducer(newS, a));
       }
   }
   return validateForm(formGroupReducer(s, a));

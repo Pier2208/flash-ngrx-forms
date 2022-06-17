@@ -1,21 +1,34 @@
-<table *ngIf="responseList.length" mat-table [dataSource]="responseList" class="table">
+<table
+  *ngIf="responseList.length"
+  mat-table
+  [dataSource]="responseList"
+  class="table"
+>
   <!-- Name Column -->
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef>
       Percentage of work done for each activities
     </th>
     <td mat-cell *matCellDef="let element">{{ element.label.LabelEn }}</td>
-    <td mat-footer-cell *matFooterCellDef> Total </td>
+    <td mat-footer-cell *matFooterCellDef>Total</td>
   </ng-container>
 
   <!-- Percentage Column -->
   <ng-container matColumnDef="percentage">
     <th mat-header-cell *matHeaderCellDef>%</th>
     <td mat-cell *matCellDef="let element">
-      <input class="table-input" [ngrxFormControlState]="(groupOptions$ | async)[element.responseKey]" placeholder="0"
-        matInput type="number" value="{{ element.percentage || 0  }}" />
+      <input
+        class="table-input"
+        [ngrxFormControlState]="(groupOptions$ | async)[element.responseKey]"
+        placeholder="0"
+        matInput
+        type="number"
+        min="0"
+        max="100"
+        value="{{ element.percentage || 0 }}"
+      />
     </td>
-    <td mat-footer-cell *matFooterCellDef> {{getTotalPercentage()}} </td>
+    <td mat-footer-cell *matFooterCellDef>{{ getTotalPercentage() }}</td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
