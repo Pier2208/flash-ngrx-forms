@@ -100,16 +100,6 @@ export class FormComponent implements OnInit, OnDestroy {
     return question?.rules.length ? true : false;
   }
 
-  // submit() {
-  //   this.formState$.pipe(
-  //     take(1),
-  //     filter(s => {
-  //       console.log('state', s)
-  //       return s.isValid
-  //     }),
-  //     map(fs => new SetSubmittedValueAction(fs.value)),
-  //   ).subscribe(this.store);
-  // }
   submit() {
     this.formState$
       .pipe(
@@ -151,6 +141,7 @@ export class FormComponent implements OnInit, OnDestroy {
 
     this.submittedValue$.subscribe((data) => {
       if (data) this.flashquoteService.submitQuote(data);
+      this.router.navigate(['prime'])
       // this.flashquoteService.submitQuote(data).subscribe({
       //   next: quoteResult => {
       //     console.log('quote result', quoteResult)

@@ -1,5 +1,5 @@
 <table
-  *ngIf="responseList.length"
+  *ngIf="responseList.length" @fadeSlideIn
   mat-table
   [dataSource]="responseList"
   class="table"
@@ -22,9 +22,7 @@
         [ngrxFormControlState]="(groupOptions$ | async)[element.responseKey]"
         placeholder="0"
         matInput
-        type="number"
-        min="0"
-        max="100"
+        type="text"
         value="{{ element.percentage || 0 }}"
       />
     </td>

@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { FormControlState } from 'ngrx-forms';
@@ -11,6 +12,17 @@ import { State } from 'src/app/flashquote/store';
   selector: 'app-repartition',
   templateUrl: './repartition.component.html',
   styleUrls: ['./repartition.component.scss'],
+  animations: [
+    trigger('fadeSlideIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-30px)' }),
+        animate(
+          '500ms ease-in-out',
+          style({ opacity: 1, transform: 'translateY(0)' })
+        )
+      ])
+    ])
+  ]
 })
 export class RepartitionComponent implements OnInit {
   displayedColumns: string[] = ['name', 'percentage'];

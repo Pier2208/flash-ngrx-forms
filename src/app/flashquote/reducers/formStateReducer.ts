@@ -60,17 +60,7 @@ export function formStateReducer(
       if (!(a.responseKey in value)) {
         const newS = updateGroup<FormValue>({
           [a.destinationId]: (group: any) => {
-            const newG = addGroupControl(group, a.responseKey, null)
-            console.log(newG.controls)
-            const updateFns = Object.keys(newG.controls).reduce(
-              (fns, key) => ({
-                ...fns,
-                [key]: validate(required),
-              }),
-              {} as StateUpdateFns<typeof s.value>
-            );
-            console.log('ertyuio', updateFns)
-            return updateGroup(s, updateFns);
+            return addGroupControl(group, a.responseKey, null)
           }
         })(s);
         return validateForm(formGroupReducer(newS, a));
