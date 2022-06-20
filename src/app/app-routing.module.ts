@@ -8,11 +8,13 @@ const routes: Routes = [
   {
     path: 'direct/:marketId',
     loadChildren: () =>
-      import('./flashquote/flashquote.module').then((m) => m.FlashquoteModule)
+      import('./flashquote/flashquote.module').then((m) => m.FlashquoteModule),
+      data: { animation: 'flashquote'}
   },
   {
     path: 'prime',
-    component: PrimeComponent
+    component: PrimeComponent,
+    data: { animation: 'prime'}
   }
 ];
 

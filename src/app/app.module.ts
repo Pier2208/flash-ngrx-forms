@@ -20,6 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     StoreModule.forRoot({}, {}),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
@@ -28,7 +29,6 @@ import { HttpClientModule } from '@angular/common/http';
       stateKey: 'router',
       routerState: RouterState.Minimal
     }),
-    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

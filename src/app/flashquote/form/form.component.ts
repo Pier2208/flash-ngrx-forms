@@ -141,6 +141,9 @@ export class FormComponent implements OnInit, OnDestroy {
 
     this.submittedValue$.subscribe((data) => {
       if (data) this.flashquoteService.submitQuote(data);
+      setTimeout(() => {
+        this.router.navigate(['prime'])
+      }, 5000)
       //this.router.navigate(['prime'])
       // this.flashquoteService.submitQuote(data).subscribe({
       //   next: quoteResult => {
