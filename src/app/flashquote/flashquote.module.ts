@@ -29,6 +29,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ErrorComponent } from './questions/components/error/error.component';
 import { PrimeComponent } from './prime/prime.component';
 import { InputNumberFormatDirective } from './directives/input-number-format.directive';
+import { LoaderComponent } from './shared/loader/loader.component';
 
 
 @NgModule({
@@ -44,7 +45,8 @@ import { InputNumberFormatDirective } from './directives/input-number-format.dir
     RepartitionComponent,
     ErrorComponent,
     PrimeComponent,
-    InputNumberFormatDirective
+    InputNumberFormatDirective,
+    LoaderComponent
   ],
   imports: [
     CommonModule,
