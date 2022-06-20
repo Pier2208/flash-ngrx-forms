@@ -1,9 +1,58 @@
 /** BASE **/
+:root {
+    font-size: 12px;
+    /** TYPOGRAPHIE **/
+    --font-display: "Poppins", sans-serif;
+    --font-body: "Lato", sans-serif;
+
+    /** BREAKPOINTS **/
+    --width-s: 1080px;
+    --width-m: 1280px;
+    --width-l: 1920px;
+
+    --bp-xl: 87.5em;
+    --bp-l: 68.75em;
+    --bp-m: 56.25em;
+    --bp-s: 600px;
+    --bp-xs: 450px;
+    --bp-xxs: 18.75em;
+
+    /** SPACING **/
+    --spacing-s: 0.5rem;
+    --spacing-m: 1.5rem;
+    --spacing-l: 3rem;
+
+    /** COLOR **/
+    --color-primary: #639e30;
+}
 
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    line-height: 1.6;
-    vertical-align: baseline;
+    line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+.heading {
+    font-family: var(--font-display);
+}
+
+body {
+    font-family: var(--font-body);
+}
+
+// Adaptation de la police
+@media (min-width: 500px) {
+    :root {
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 680px) {
+    :root {
+        font-size: 1rem;
+    }
 }
