@@ -23,8 +23,8 @@ const resetRoute = [
         { optional: true }
     ),
 ];
-export const RouteFadeAnimation = [
-    trigger('routeFadeAnimation', [
+export const RouteSlideAnimation = [
+    trigger('routeSlideAnimation', [
         transition('flashquote => prime', [
             ...resetRoute,
             query(':enter', [style({ transform: 'translateX(100vw)', opacity: 0 })], {

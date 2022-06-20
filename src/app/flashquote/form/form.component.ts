@@ -32,6 +32,7 @@ export class FormComponent implements OnInit, OnDestroy {
   formValid$: Observable<boolean>;
   formSubmitted$: Observable<boolean>;
   submittedValue$: Observable<FormValue | undefined>;
+  submittingForm = false;
   answers: Answer[];
   formSubscription: Subscription;
 
@@ -108,6 +109,7 @@ export class FormComponent implements OnInit, OnDestroy {
           return state.isValid;
         }),
         map((form) => {
+          this.submittingForm = true;
           let answers = [];
           for (let key in form.value) {
             if (key === '2885') {
@@ -140,10 +142,13 @@ export class FormComponent implements OnInit, OnDestroy {
       .subscribe(this.store);
 
     this.submittedValue$.subscribe((data) => {
-      if (data) this.flashquoteService.submitQuote(data);
-      setTimeout(() => {
-        this.router.navigate(['prime'])
-      }, 5000)
+      if (data) {
+        this.flashquoteService.submitQuote(data);
+        setTimeout(() => {
+          this.submittingForm = false;
+          this.router.navigate(['prime'])
+        }, 5000)
+      }
       //this.router.navigate(['prime'])
       // this.flashquoteService.submitQuote(data).subscribe({
       //   next: quoteResult => {
